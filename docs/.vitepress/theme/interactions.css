@@ -1,0 +1,677 @@
+/* ============================================================================
+   推理王国 - 交互效果增强
+   基于Notion设计系统的微交互和动画
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. 平滑滚动和页面过渡
+   ---------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* 页面加载动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* 内容渐入动画 */
+.content-fade-in {
+  animation: contentFadeIn 0.6s ease-out;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   2. 悬停效果增强
+   ---------------------------------------------------------------------------- */
+
+/* 卡片悬停效果 */
+.hover-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.hover-card:hover::before {
+  left: 100%;
+}
+
+.hover-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* 按钮悬停效果 */
+.hover-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.hover-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.hover-button:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* 链接悬停下划线动画 */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--notion-primary), var(--notion-info));
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------------------
+   3. 加载状态和骨架屏
+   ---------------------------------------------------------------------------- */
+
+/* 骨架屏动画 */
+.skeleton {
+  background: linear-gradient(90deg, var(--notion-bg-alt) 25%, var(--notion-bg) 50%, var(--notion-bg-alt) 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+/* 加载旋转器 */
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--notion-border);
+  border-top-color: var(--notion-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}
+
+.spinner-lg {
+  width: 3rem;
+  height: 3rem;
+  border-width: 4px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 进度条动画 */
+.progress-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   4. 焦点状态和键盘导航
+   ---------------------------------------------------------------------------- */
+
+/* 焦点环样式 */
+.focus-ring {
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px rgba(62, 175, 124, 0.3);
+  border-radius: 6px;
+}
+
+/* 键盘导航高亮 */
+.keyboard-nav :focus {
+  outline: 2px solid var(--notion-primary);
+  outline-offset: 2px;
+}
+
+/* 跳过链接 */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--notion-primary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  z-index: 1000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 10px;
+}
+
+/* ----------------------------------------------------------------------------
+   5. 工具提示和弹出框动画
+   ---------------------------------------------------------------------------- */
+
+/* 工具提示淡入动画 */
+.tooltip-fade {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  transform: translateY(10px);
+}
+
+.tooltip-fade.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 弹出框动画 */
+.popup-enter-active,
+.popup-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.popup-enter-from,
+.popup-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* 模态框背景模糊 */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ----------------------------------------------------------------------------
+   6. 列表和网格动画
+   ---------------------------------------------------------------------------- */
+
+/* 列表项入场动画 */
+.list-item {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: listItemIn 0.5s ease forwards;
+}
+
+@keyframes listItemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 交错动画延迟 */
+.list-item:nth-child(1) { animation-delay: 0.1s; }
+.list-item:nth-child(2) { animation-delay: 0.2s; }
+.list-item:nth-child(3) { animation-delay: 0.3s; }
+.list-item:nth-child(4) { animation-delay: 0.4s; }
+.list-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* 网格项悬停效果 */
+.grid-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid-item:hover {
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+.grid-item:hover ~ .grid-item {
+  transform: translateY(4px);
+}
+
+/* ----------------------------------------------------------------------------
+   7. 文本和图标动画
+   ---------------------------------------------------------------------------- */
+
+/* 打字机效果 */
+.typewriter {
+  overflow: hidden;
+  border-right: 2px solid var(--notion-primary);
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--notion-primary); }
+}
+
+/* 文本渐入 */
+.text-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textReveal 0.8s ease forwards;
+}
+
+@keyframes textReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 图标悬停动画 */
+.icon-hover {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-hover:hover {
+  transform: scale(1.2);
+  color: var(--notion-primary);
+}
+
+.icon-spin {
+  animation: iconSpin 2s linear infinite;
+}
+
+@keyframes iconSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   8. 表单交互效果
+   ---------------------------------------------------------------------------- */
+
+/* 输入框浮动标签 */
+.floating-label {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+.floating-label input,
+.floating-label textarea {
+  padding-top: 1.5rem;
+}
+
+.floating-label label {
+  position: absolute;
+  top: 0.75rem;
+  left: 1rem;
+  color: var(--notion-text-tertiary);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label,
+.floating-label textarea:focus + label,
+.floating-label textarea:not(:placeholder-shown) + label {
+  top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--notion-primary);
+}
+
+/* 表单验证动画 */
+.form-error-shake {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* 复选框和单选框动画 */
+.checkbox-animate {
+  position: relative;
+}
+
+.checkbox-animate input {
+  opacity: 0;
+  position: absolute;
+}
+
+.checkbox-animate .checkmark {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--notion-border);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-animate input:checked + .checkmark {
+  background-color: var(--notion-primary);
+  border-color: var(--notion-primary);
+}
+
+.checkbox-animate input:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 0.1rem;
+  width: 0.4rem;
+  height: 0.7rem;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* ----------------------------------------------------------------------------
+   9. 导航和菜单动画
+   ---------------------------------------------------------------------------- */
+
+/* 下拉菜单动画 */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* 侧边栏折叠动画 */
+.sidebar-collapse {
+  transition: width 0.3s ease;
+}
+
+.sidebar-collapse.collapsed {
+  width: 0;
+  overflow: hidden;
+}
+
+/* 汉堡菜单动画 */
+.hamburger {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: var(--notion-text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 8px; }
+.hamburger span:nth-child(3) { top: 16px; }
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 8px;
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 8px;
+}
+
+/* ----------------------------------------------------------------------------
+   10. 特殊推理效果
+   ---------------------------------------------------------------------------- */
+
+/* 思维导图节点动画 */
+.mindmap-node {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.mindmap-node:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(62, 175, 124, 0.3);
+}
+
+.mindmap-node.active {
+  background: linear-gradient(135deg, var(--notion-primary), var(--notion-info));
+  color: white;
+  transform: scale(1.05);
+}
+
+/* 推理路径动画 */
+.reasoning-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 2s ease forwards;
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 代码执行动画 */
+.code-execution {
+  position: relative;
+}
+
+.code-execution::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 175, 124, 0.1), transparent);
+  animation: codeHighlight 2s linear infinite;
+}
+
+@keyframes codeHighlight {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 数据流动画 */
+.data-flow {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-flow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--notion-primary), transparent);
+  animation: dataFlow 2s linear infinite;
+}
+
+@keyframes dataFlow {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   11. 响应式交互调整
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  .hover-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  .grid-item:hover ~ .grid-item {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .typewriter {
+    white-space: normal;
+    border-right: none;
+    animation: none;
+  }
+  
+  .hover-card::before {
+    display: none;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   12. 性能优化
+   ---------------------------------------------------------------------------- */
+
+/* 减少动画对低端设备的影响 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU加速 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 懒加载占位符 */
+.lazy-placeholder {
+  background: var(--notion-bg-alt);
+  border-radius: 8px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--notion-text-tertiary);
+}
+
+/* 图片加载动画 */
+.img-loading {
+  background: linear-gradient(90deg, var(--notion-bg-alt) 25%, var(--notion-bg) 50%, var(--notion-bg-alt) 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+}

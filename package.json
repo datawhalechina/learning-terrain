@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "markdown-it-container": "^4.0.0",
+    "markdown-it-mathjax3": "^4.3.2",
+    "vitepress": "^1.6.4",
+    "vitepress-export-pdf": "^1.0.0"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "NODE_OPTIONS=--max-old-space-size=4096 vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "export-pdf": "press-export-pdf export docs",
+    "build:en": "vitepress build docs_en"
+  },
+  "dependencies": {
+    "@ampernic/vitepress-plugin-export": "^0.1.39",
+    "vitepress-plugin-image-viewer": "^1.1.6"
+  }
+}

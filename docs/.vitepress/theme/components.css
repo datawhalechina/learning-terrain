@@ -1,0 +1,904 @@
+/* ============================================================================
+   推理王国 - Notion风格组件库
+   基于Notion设计系统的组件优化
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. 按钮组件增强
+   ---------------------------------------------------------------------------- */
+
+/* 主要按钮变体 */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-base);
+  color: white;
+  background-color: var(--notion-primary);
+  border: 2px solid var(--notion-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  background-color: var(--notion-primary-hover);
+  border-color: var(--notion-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--notion-shadow-md);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 次要按钮 */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-base);
+  color: var(--notion-text-primary);
+  background-color: transparent;
+  border: 2px solid var(--notion-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover {
+  background-color: var(--notion-bg-alt);
+  border-color: var(--notion-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--notion-shadow-sm);
+}
+
+/* 幽灵按钮 */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-base);
+  color: var(--notion-text-secondary);
+  background-color: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  gap: 0.5rem;
+}
+
+.btn-ghost:hover {
+  background-color: var(--notion-bg-alt);
+  color: var(--notion-text-primary);
+}
+
+/* 按钮大小 */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: var(--notion-text-sm);
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: var(--notion-text-lg);
+}
+
+/* 按钮图标 */
+.btn-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.btn-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ----------------------------------------------------------------------------
+   2. 卡片组件
+   ---------------------------------------------------------------------------- */
+
+.card {
+  background-color: var(--notion-bg-elevated);
+  border: 1px solid var(--notion-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--notion-shadow-lg);
+  border-color: var(--notion-primary);
+}
+
+.card-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--notion-border);
+}
+
+.card-title {
+  font-family: var(--notion-font-serif);
+  font-weight: var(--notion-font-semibold);
+  font-size: var(--notion-text-xl);
+  color: var(--notion-text-primary);
+  margin: 0;
+}
+
+.card-subtitle {
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-normal);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.card-body {
+  color: var(--notion-text-secondary);
+  line-height: var(--notion-leading-relaxed);
+}
+
+.card-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--notion-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 卡片变体 */
+.card-featured {
+  border-color: var(--notion-primary);
+  background: linear-gradient(135deg, var(--notion-bg-elevated), rgba(62, 175, 124, 0.05));
+}
+
+.card-featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--notion-primary), var(--notion-info));
+}
+
+.card-minimal {
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 1rem;
+}
+
+.card-minimal:hover {
+  background-color: var(--notion-bg-alt);
+  border-color: var(--notion-border);
+}
+
+/* ----------------------------------------------------------------------------
+   3. 表单组件
+   ---------------------------------------------------------------------------- */
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-base);
+  color: var(--notion-text-primary);
+  background-color: var(--notion-bg);
+  border: 1px solid var(--notion-border);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  line-height: var(--notion-leading-normal);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--notion-primary);
+  box-shadow: 0 0 0 3px rgba(62, 175, 124, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--notion-text-tertiary);
+}
+
+.form-input:disabled {
+  background-color: var(--notion-bg-alt);
+  color: var(--notion-text-disabled);
+  cursor: not-allowed;
+}
+
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.form-checkbox,
+.form-radio {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.form-checkbox-label,
+.form-radio-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-base);
+  color: var(--notion-text-primary);
+  cursor: pointer;
+}
+
+.form-help {
+  display: block;
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-text-tertiary);
+  margin-top: 0.5rem;
+}
+
+.form-error {
+  display: block;
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-error);
+  margin-top: 0.5rem;
+}
+
+.form-input-error {
+  border-color: var(--notion-error);
+}
+
+.form-input-error:focus {
+  border-color: var(--notion-error);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* ----------------------------------------------------------------------------
+   4. 导航组件
+   ---------------------------------------------------------------------------- */
+
+/* 标签导航 */
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid var(--notion-border);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.tab-item {
+  padding: 0.75rem 1.5rem;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-base);
+  color: var(--notion-text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-item:hover {
+  color: var(--notion-text-primary);
+}
+
+.tab-item.active {
+  color: var(--notion-primary);
+  border-bottom-color: var(--notion-primary);
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breadcrumb-link {
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: var(--notion-text-primary);
+}
+
+.breadcrumb-link.active {
+  color: var(--notion-text-primary);
+  font-weight: var(--notion-font-medium);
+}
+
+.breadcrumb-separator {
+  color: var(--notion-text-tertiary);
+  font-size: var(--notion-text-sm);
+}
+
+/* 分页导航 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.pagination-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-base);
+  color: var(--notion-text-secondary);
+  background-color: transparent;
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pagination-item:hover {
+  background-color: var(--notion-bg-alt);
+  color: var(--notion-text-primary);
+}
+
+.pagination-item.active {
+  background-color: var(--notion-primary);
+  border-color: var(--notion-primary);
+  color: white;
+}
+
+.pagination-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------------------------
+   5. 消息和提示组件
+   ---------------------------------------------------------------------------- */
+
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-semibold);
+  font-size: var(--notion-text-base);
+  margin: 0 0 0.25rem 0;
+}
+
+.alert-message {
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-text-secondary);
+  margin: 0;
+  line-height: var(--notion-leading-relaxed);
+}
+
+/* 警告类型 */
+.alert-info {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+  color: var(--notion-info);
+}
+
+.alert-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: var(--notion-success);
+}
+
+.alert-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: var(--notion-warning);
+}
+
+.alert-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: var(--notion-error);
+}
+
+/* 工具提示 */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--notion-font-sans);
+  font-size: var(--notion-text-sm);
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+  margin-bottom: 0.5rem;
+}
+
+.tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ----------------------------------------------------------------------------
+   6. 进度和状态组件
+   ---------------------------------------------------------------------------- */
+
+.progress-bar {
+  width: 100%;
+  height: 0.5rem;
+  background-color: var(--notion-bg-alt);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--notion-primary), var(--notion-info));
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* 徽章 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-xs);
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-primary {
+  background-color: rgba(62, 175, 124, 0.1);
+  color: var(--notion-primary);
+}
+
+.badge-secondary {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: var(--notion-text-secondary);
+}
+
+.badge-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--notion-success);
+}
+
+.badge-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--notion-warning);
+}
+
+.badge-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--notion-error);
+}
+
+/* 状态指示器 */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+
+.status-dot.online {
+  background-color: var(--notion-success);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.status-dot.offline {
+  background-color: var(--notion-error);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.status-dot.idle {
+  background-color: var(--notion-warning);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+/* ----------------------------------------------------------------------------
+   7. 布局组件
+   ---------------------------------------------------------------------------- */
+
+/* 网格系统 */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 960px) {
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .grid-cols-4,
+  .grid-cols-3,
+  .grid-cols-2 { grid-template-columns: repeat(1, 1fr); }
+}
+
+/* 弹性布局 */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* 间距工具 */
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+
+.p-4 { padding: 1rem; }
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+
+/* ----------------------------------------------------------------------------
+   8. 特殊推理王国组件
+   ---------------------------------------------------------------------------- */
+
+/* 推理步骤 */
+.reasoning-step {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 2rem;
+}
+
+.reasoning-step::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--notion-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-bold);
+  font-size: var(--notion-text-sm);
+}
+
+.reasoning-step-title {
+  font-family: var(--notion-font-serif);
+  font-weight: var(--notion-font-semibold);
+  font-size: var(--notion-text-lg);
+  color: var(--notion-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.reasoning-step-content {
+  color: var(--notion-text-secondary);
+  line-height: var(--notion-leading-relaxed);
+}
+
+/* 定理框 */
+.theorem-box {
+  background: linear-gradient(135deg, rgba(62, 175, 124, 0.05), rgba(45, 140, 240, 0.05));
+  border: 2px solid var(--notion-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.theorem-box::before {
+  content: '定理';
+  position: absolute;
+  top: -0.75rem;
+  left: 1.5rem;
+  background-color: var(--notion-bg);
+  padding: 0 0.75rem;
+  font-family: var(--notion-font-serif);
+  font-weight: var(--notion-font-bold);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.theorem-title {
+  font-family: var(--notion-font-serif);
+  font-weight: var(--notion-font-bold);
+  font-size: var(--notion-text-lg);
+  color: var(--notion-text-primary);
+  margin-bottom: 1rem;
+}
+
+.theorem-content {
+  color: var(--notion-text-secondary);
+  line-height: var(--notion-leading-relaxed);
+}
+
+.theorem-proof {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--notion-border);
+}
+
+.theorem-proof::before {
+  content: '证明';
+  display: block;
+  font-family: var(--notion-font-serif);
+  font-weight: var(--notion-font-bold);
+  font-size: var(--notion-text-base);
+  color: var(--notion-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* 代码示例 */
+.code-example {
+  background-color: var(--notion-code-bg);
+  border: 1px solid var(--notion-code-border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+}
+
+.code-example-header {
+  background-color: var(--notion-bg-alt);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--notion-code-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.code-example-title {
+  font-family: var(--notion-font-sans);
+  font-weight: var(--notion-font-medium);
+  font-size: var(--notion-text-sm);
+  color: var(--notion-text-primary);
+  margin: 0;
+}
+
+.code-example-content {
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+/* ----------------------------------------------------------------------------
+   9. 动画效果
+   ---------------------------------------------------------------------------- */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* 悬停效果 */
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-rotate {
+  transition: transform 0.3s ease;
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+/* ----------------------------------------------------------------------------
+   10. 响应式调整
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  .card {
+    padding: 1rem;
+  }
+  
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .tab-nav {
+    flex-wrap: wrap;
+  }
+  
+  .tab-item {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .grid-cols-2,
+  .grid-cols-3 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .reasoning-step {
+    padding-left: 2.5rem;
+  }
+  
+  .reasoning-step::before {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
