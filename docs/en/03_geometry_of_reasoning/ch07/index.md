@@ -12,6 +12,20 @@ The real reasoning is not these words. The real reasoning happens in the model's
 
 Chain of thought is not reasoning itself. **Chain of thought is the visible projection of the reasoning trajectory.**
 
+:::info
+
+**Pallas's Cat Professor: Above and Below the Surface**
+
+A friend of mine is a cave diver. He once told me something: in pitch-black underwater caves, the only thing you can see is not the current itself—but the fine sand and bubbles it carries. The sand tells you the water is moving, but the sand is not the water.
+
+The tokens of chain of thought are your sand. The model outputs "first... then... therefore..."—you see the logical sequence, just as the diver in the dark water sees the trail of sand grains. But that trail is only a cross-section of the three-dimensional current, illuminated by chance by your flashlight.
+
+The real reasoning happens much deeper. That several-hundred-dimensional hidden state space is the water—continuous, curved, pushed along by a vector field driven by a single problem. The chain of thought you see is only a cross-section of that surface, lit up momentarily.
+
+That is the central claim of this chapter: **the explicit chain is the shadow; the implicit chain is the body.** And what we are about to do—definitions, theorems, derivations—is not meant to make you forget the surface. It is meant to teach you to dive.
+
+:::
+
 But if the word "projection" remains at the level of metaphor, it explains nothing. Why does CoT training improve the accuracy of direct answers? Why are some tokens critical while others are merely filler? Why does zero-shot CoT work? To answer these questions, we must turn the metaphor into geometry—first rigorously define the two objects, then analyze the relationship between them, and finally provide an explanation via theorems.
 
 ## 7.1 Formal Definition of the Two Types of Chains
@@ -36,6 +50,14 @@ $$p_\theta(\cdot \mid x, x_{<t}) = \text{softmax}(W_{\text{lm}} h_t)$$
 
 Then $x_t$ is sampled from this distribution. The projection matrix $W_{\text{lm}}$ compresses a $d$-dimensional continuous vector into a $|V|$-dimensional probability vector—this is an irreversible, lossy operation. A great deal of geometric information in the hidden state is lost in this projection. Just as a three-dimensional curve projected onto two-dimensional paper—you see only a few discrete points, but not the continuous curvature between them.
 
+You may ask: what is the practical significance of rigorously distinguishing these two objects—the explicit chain and the implicit chain? After all, in everyday use, we only care whether the model's output text is logically coherent.
+
+The significance is this: **once you admit there is a current beneath the surface, you will begin to ask about the laws that govern that current.** You cannot ask about something whose existence you do not acknowledge.
+
+Think about it. If chain of thought were truly just a sequence of words, then "training a model to output CoT" and "training a model to output any other text format" should be fundamentally no different—just as training a model to output JSON versus YAML is merely a formatting choice. But experiments repeatedly show otherwise. The effect of CoT training—on mathematical reasoning, logic puzzles, and code generation—does not merely come from "writing a few more tokens." It comes from something deeper, some structural transformation of the hidden state space.
+
+To understand that something, we first need to give it a name. "Implicit chain" is that name.
+
 With these two definitions, a natural follow-up question emerges: **how does the implicit chain itself move?** What laws govern each of its steps—$h_t \to h_{t+1}$?
 
 ## 7.2 Dynamics of the Implicit Chain: Euler's Method in Hidden State Space
@@ -49,6 +71,21 @@ where $F_\theta$ is the composite vector field of self-attention and FFN inside 
 **Property 1 (Trajectory Continuity)**. $F_\theta$ is Lipschitz continuous with respect to $h_t$. When the step size $\eta = 1$, the magnitude of discrete jumps in the trajectory is bounded by $\|F_\theta(h_t, x_{t+1})\|$. Small magnitude of $F_\theta$ means the hidden state evolves smoothly between adjacent steps—this is precisely the geometric signature of coherent reasoning. Large-magnitude jumps—"ruptures"—correspond to logical leaps or errors in reasoning.
 
 **Property 2 (Self-Driven Nature)**. $F_\theta(h_t, x_{t+1})$ depends on $x_{t+1}$—the token that the model **itself chooses**. Chain of thought is a **self-driven** dynamical system: the model chooses a direction at each step (by choosing a token), and then advances along that direction. This "push-oneself" structure makes the chain-of-thought trajectory richer than that of feedforward ResNets—and also more dangerous: a single wrong choice can push the trajectory toward a completely wrong attractor.
+
+:::info
+
+**Pallas's Cat Professor: The Skier**
+
+A ResNet's trajectory is like a marble rolling down a hill—its initial position and the terrain determine its entire fate. The marble has no choice. It simply obeys gravity.
+
+But a chain-of-thought trajectory is not a marble. It is a skier.
+
+The skier looks at the terrain ahead and chooses a route—veering left around a rock, carving right over a snow bank. With every choice they make, the terrain shifts slightly because of their new position. The slope of the next stretch depends on which fork they just chose.
+
+This is the essence of a self-driven system: **the model chooses a token at each step, and that token determines the direction of the next hidden-state update.** It is reasoning, and at the same time it is paving the road for its own reasoning. Every time it says "therefore," it creates a slightly different footing for its next "so."
+
+This explains why chain of thought sometimes goes off the rails. If the skier takes a wrong fork—turns left when they should have turned right—they may ski into a dead end. And they cannot turn back, because with every extra meter they ski, the way back becomes steeper. When the model utters a wrong "first," every subsequent "then" has to navigate a terrain that the "first" has already reshaped. The error is not added on top of the correct answer—the error changes the road to the answer.
+:::
 
 This dynamical description explains the geometric difference between "coherent reasoning" and "derailed reasoning"—but a more vexing question still hangs in the air. The opening of ch7 raised this: **after CoT training, even without outputting a chain of thought, the accuracy of direct answers improves**. Why?
 
@@ -70,6 +107,14 @@ The addition of $\Delta H$ causes the eigenvalues of the Hessian at $p^*$ to dec
 
 **This is the geometric reason why CoT training improves direct-answer accuracy**: it is not teaching the model to "write a few more steps"—it is widening the correct reasoning path, so that even without the guidance of intermediate tokens, the trajectory can naturally flow toward the correct answer.
 
+This runs completely counter to our everyday intuition. We think that "writing out the steps" is the process of reasoning itself—as if the model must "speak aloud" to complete its thinking. But Theorem 1 tells us: **CoT training changes not the model's "speaking habits," but where the model goes when it is silent.**
+
+It is a bit like learning to ride a bicycle. Before you have learned, you might need to say aloud: "First look left, then push with the right foot, keep balance..." But once you have learned, you no longer need to speak—your body knows. Not because the speaking itself helped, but because in the process of "speaking while riding," your body internalized a set of motor patterns.
+
+CoT training does something exactly parallel. During training, the model is forced to pass through a series of conceptual anchors ($c_1 \to c_2 \to \cdots \to c_k$) in hidden state space. The positions of these anchors are determined by the "standard chain of thought" in the training data. After repeatedly traversing this path, the loss terrain is depressed along the line connecting the anchors—even without explicitly walking through these anchors, the gradient naturally points in their direction.
+
+**You don't need the model to say "let's think step by step"—you have already made its internal gradients say it.**
+
 With this explanation in hand, the next question emerges naturally: not every step in a chain of thought is equally important. Some steps are critical reasoning leaps, others are merely filler rhetoric. Can we distinguish them—without reading the text—solely through the geometric features of the hidden states?
 
 ## 7.4 Geometric Classification of Reasoning Steps
@@ -81,6 +126,17 @@ With this explanation in hand, the next question emerges naturally: not every st
 - **Corrective step**: $\|\Delta h_t\|$ is large, and $\cos \alpha_t < 0$ (direction reversal). Corresponds to the model "realizing" that the previous step was erroneous and self-correcting.
 
 This classification does not depend on the semantic content of tokens—it is purely based on the numerical features of the hidden state trajectory. You do not need to read the text output by the model; you only need to track the time series of $\|\Delta h_t\|$ and $\cos \alpha_t$ to identify which steps in a chain of thought are genuine reasoning leaps.
+
+:::info
+
+**Pallas's Cat Professor: Consequences of Classification**
+
+This purely geometric classification method has a radical consequence. If I can judge which of your steps are genuine reasoning, which are filler, and which are self-correction—without reading your words, only by examining the displacement vectors of your hidden states—then in principle I can **know whether you are reasoning without you writing out a chain of thought.**
+
+This means "reasoning" can be transformed from a behavioral concept ("the model output text that looks logical") into a geometric concept ("the model underwent a substantive directional displacement in hidden state space"). You no longer need human annotators to label a chain of thought as "high quality"—you only need to compute $\|\Delta h_t\|$ and $\cos \alpha_t$ at each step, then count how many steps are "substantive."
+
+This is one step away from "automatable reasoning quality assessment": run a correlation analysis between $\|\Delta h_t\|$ and correctness scores, and you have a reasoning evaluator that does not require a human judge.
+:::
 
 After classification, a deeper question emerges: **does the entire trajectory eventually converge?** Converge to where? How many steps does convergence require?
 
