@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container'
 
 const isEdgeOne = process.env.EDGEONE === '1'
-const baseConfig = isEdgeOne ? '/' : '/the-terrain-of-learning/'
+const baseConfig = isEdgeOne ? '/' : '/learning-terrain/'
 
 const mdConfig = (md: any) => {
   const defaultRender = md.renderer.rules.html_inline || function(tokens: any, idx: any, options: any, env: any, self: any) {
@@ -116,10 +116,10 @@ export default defineConfig({
           ]
         },
         socialLinks: [
-          { icon: 'github', link: 'https://github.com/datawhalechina/the-terrain-of-learning/' }
+          { icon: 'github', link: 'https://github.com/lizixi-0x2F/learning-terrain/' }
         ],
         editLink: {
-          pattern: 'https://github.com/datawhalechina/the-terrain-of-learning/blob/main/docs/:path'
+          pattern: 'https://github.com/lizixi-0x2F/learning-terrain/blob/main/docs/:path'
         },
         footer: {
           message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a> | <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010602202215" rel="noreferrer" target="_blank">京公网安备11010602202215号</a>',
@@ -201,10 +201,10 @@ export default defineConfig({
           ]
         },
         socialLinks: [
-          { icon: 'github', link: 'https://github.com/datawhalechina/the-terrain-of-learning/' }
+          { icon: 'github', link: 'https://github.com/lizixi-0x2F/learning-terrain/' }
         ],
         editLink: {
-          pattern: 'https://github.com/datawhalechina/the-terrain-of-learning/blob/main/docs/:path'
+          pattern: 'https://github.com/lizixi-0x2F/learning-terrain/blob/main/docs/:path'
         },
         footer: {
           copyright: 'Licensed under <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>'
