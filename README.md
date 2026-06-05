@@ -2,6 +2,10 @@
 <h3 align="center">推理几何与智能动力学导论</h3>
 
 <div align="center">
+  <img src="docs/public/cover_cn.png" alt="学习的地形" width="400">
+</div>
+
+<div align="center">
 
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![VitePress](https://img.shields.io/badge/built%20with-VitePress-646cff?style=flat-square)](https://vitepress.dev/)
@@ -65,7 +69,7 @@
 
 ## 关于作者
 
-**李籽溪（兔狲）**——独立 AI 研究者，NoesisLab 创始人。致力于推理几何、优化理论、动力系统与深度学习的交叉研究。《推理王国》作者。将几何视角引入深度学习基础理论，用"能量地形"统一了从梯度下降到扩散模型的完整叙事。
+**李籽溪（兔狲）**——独立 AI 研究者。致力于推理几何、优化理论、动力系统与深度学习的交叉研究。《推理王国》作者。将几何视角引入深度学习基础理论，用"能量地形"统一了从梯度下降到扩散模型的完整叙事。
 
 兔狲教授住在中山大学黑石屋——至少书里是这么写的。
 
