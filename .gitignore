@@ -33,5 +33,4 @@ backup/
 .claude/
 *.log
 
-# Lock file (optional — uncomment if preferred)
-package-lock.json
+
