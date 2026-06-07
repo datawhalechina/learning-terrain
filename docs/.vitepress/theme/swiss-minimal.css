@@ -1,0 +1,844 @@
+/* ============================================================================
+   学习的地形 — 瑞士极简平面设计系统
+   Swiss Minimal Flat Design System
+   
+   原则：
+   - 平面：无阴影、无渐变、无圆角装饰
+   - 留白：大面积呼吸空间，内容为王
+   - 节制：绿色仅用于功能性强调（链接、标题下划线）
+   - 端庄：宋体 + Georgia 的学术书卷气质
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   0. 字体导入
+   ---------------------------------------------------------------------------- */
+@import url('https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Fira+Code:wght@400;500;600;700&display=swap');
+
+/* ----------------------------------------------------------------------------
+   1. 色彩系统 — 白/黑/清新绿
+   ---------------------------------------------------------------------------- */
+
+:root {
+  /* 主色 — Apple 系统绿 #34c759：荧光笔般清新 */
+  --swiss-green: #34c759;
+  --swiss-green-dark: #28a745;
+  --swiss-green-light: rgba(52, 199, 89, 0.08);
+  --swiss-green-border: rgba(52, 199, 89, 0.2);
+  --swiss-green-soft: rgba(52, 199, 89, 0.04);
+
+  /* 背景 — 纯白系 */
+  --swiss-bg: #ffffff;
+  --swiss-bg-alt: #fafaf9;
+  --swiss-bg-sidebar: #fafaf9;
+
+  /* 文本 — 黑系 */
+  --swiss-text: #1a1a1a;
+  --swiss-text-secondary: #555555;
+  --swiss-text-tertiary: #888888;
+
+  /* 边框 — 极克制 */
+  --swiss-border: #e8e8e6;
+  --swiss-divider: #f0f0ee;
+
+  /* 代码块 */
+  --swiss-code-bg: #f8f8f7;
+  --swiss-code-border: #e8e8e6;
+}
+
+/* ----------------------------------------------------------------------------
+   2. 排版 — 宋体(中文) + Georgia(英文) + JetBrains Mono(代码)
+   ---------------------------------------------------------------------------- */
+
+:root {
+  /* 中文：Noto Serif SC（宋体最优解），降级到系统宋体 */
+  --swiss-font-cn: 'Noto Serif SC', 'Songti SC', 'SimSun', '宋体', STSong, serif;
+  /* 英文：Fira Code — 等宽几何感 */
+  --swiss-font-en: 'Fira Code', monospace;
+  /* 代码 */
+  --swiss-font-mono: 'Fira Code', monospace;
+  /* 混合栈：中文宋体，英文 Fira Code */
+  --swiss-font-body: 'Noto Serif SC', 'Fira Code', 'Songti SC', 'SimSun', '宋体', monospace;
+
+  /* 字号 */
+  --swiss-text-xs: 0.75rem;
+  --swiss-text-sm: 0.875rem;
+  --swiss-text-base: 1rem;
+  --swiss-text-lg: 1.125rem;
+  --swiss-text-xl: 1.25rem;
+  --swiss-text-2xl: 1.5rem;
+  --swiss-text-3xl: 1.75rem;
+  --swiss-text-4xl: 2rem;
+
+  /* 行高 */
+  --swiss-leading-tight: 1.3;
+  --swiss-leading-normal: 1.6;
+  --swiss-leading-relaxed: 1.75;
+
+  /* 字重 */
+  --swiss-font-normal: 400;
+  --swiss-font-medium: 500;
+  --swiss-font-semibold: 600;
+  --swiss-font-bold: 700;
+}
+
+/* ----------------------------------------------------------------------------
+   2a. 全局正文
+   ---------------------------------------------------------------------------- */
+
+body {
+  font-family: var(--swiss-font-body);
+  font-weight: 500;
+  color: var(--swiss-text);
+  background-color: var(--swiss-bg);
+  line-height: var(--swiss-leading-relaxed);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----------------------------------------------------------------------------
+   2b. 标题 — 宋体主导，Georgia 作英文降级
+   ---------------------------------------------------------------------------- */
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4,
+.vp-doc h5,
+.vp-doc h6 {
+  font-family: var(--swiss-font-cn);
+  color: var(--swiss-text);
+  line-height: var(--swiss-leading-tight);
+  margin-top: 2.25em;
+  margin-bottom: 0.5em;
+  letter-spacing: 0;
+}
+
+.vp-doc h1 {
+  font-size: var(--swiss-text-4xl);
+  font-weight: var(--swiss-font-bold);
+  margin-top: 1.5em;
+  /* 标题下：一条细绿线 — 瑞士风格的功能性装饰 */
+  padding-bottom: 0.4em;
+  border-bottom: 1.5px solid var(--swiss-green);
+}
+
+.vp-doc h2 {
+  font-size: var(--swiss-text-3xl);
+  font-weight: var(--swiss-font-bold);
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--swiss-border);
+}
+
+/* h2 几何标记：70年代原子能学术风 ◆ 前置 */
+.vp-doc h2::before {
+  content: '◆';
+  color: var(--swiss-green);
+  font-size: 0.55em;
+  margin-right: 0.55em;
+  vertical-align: 0.15em;
+}
+
+.vp-doc h3 {
+  font-size: var(--swiss-text-2xl);
+  font-weight: var(--swiss-font-semibold);
+}
+
+.vp-doc h4 {
+  font-size: var(--swiss-text-xl);
+  font-weight: var(--swiss-font-semibold);
+  color: var(--swiss-text-secondary);
+}
+
+.vp-doc h5 {
+  font-size: var(--swiss-text-lg);
+  font-weight: var(--swiss-font-medium);
+  color: var(--swiss-text-secondary);
+}
+
+.vp-doc h6 {
+  font-size: var(--swiss-text-base);
+  font-weight: var(--swiss-font-medium);
+  color: var(--swiss-text-tertiary);
+}
+
+/* ----------------------------------------------------------------------------
+   3. 段落与文本
+   ---------------------------------------------------------------------------- */
+
+.vp-doc p {
+  margin-bottom: 1.25em;
+  line-height: var(--swiss-leading-relaxed);
+  font-size: var(--swiss-text-base);
+}
+
+/* 首段不放大 — 与正文一致 */
+.vp-doc p:first-of-type {
+  font-size: var(--swiss-text-base);
+  font-weight: var(--swiss-font-normal);
+}
+
+/* 加粗与斜体 — 半色调波点底纹，仅正文段落/列表/表格内 */
+.vp-doc p strong,
+.vp-doc p em,
+.vp-doc li strong,
+.vp-doc li em,
+.vp-doc td strong,
+.vp-doc td em {
+  font-weight: 600;
+  background: radial-gradient(circle, rgba(52, 199, 89, 0.28) 1.25px, transparent 1.25px);
+  background-size: 5px 5px;
+  padding: 0.05em 0.15em;
+}
+
+/* 各级标题 — 同款半色调波点 */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4,
+.vp-doc h5,
+.vp-doc h6 {
+  background: radial-gradient(circle, rgba(52, 199, 89, 0.2) 1.25px, transparent 1.25px);
+  background-size: 5px 5px;
+}
+
+/* 行内数学公式 — 波点底纹（行内元素，自然贴身） */
+.vp-doc mjx-container:not([display="true"]) {
+  background: radial-gradient(circle, rgba(52, 199, 89, 0.28) 1.25px, transparent 1.25px);
+  background-size: 5px 5px;
+  padding: 0.05em 0.15em;
+}
+
+/* 块级公式 — 波点仅包裹公式本体 */
+.vp-doc mjx-container[display="true"] {
+  display: block !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: radial-gradient(circle, rgba(52, 199, 89, 0.28) 1.25px, transparent 1.25px);
+  background-size: 5px 5px;
+  padding: 0.15em 0.3em;
+}
+
+/* ----------------------------------------------------------------------------
+   4. 链接 — 仅绿色，无下划线装饰，悬停变色
+   ---------------------------------------------------------------------------- */
+
+.vp-doc a {
+  color: var(--swiss-green);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  border-bottom: none;
+}
+
+.vp-doc a:hover {
+  color: var(--swiss-green-dark);
+}
+
+/* ----------------------------------------------------------------------------
+   5. 引用块 — 点线左边框（70年代学术风）
+   ---------------------------------------------------------------------------- */
+
+.vp-doc blockquote {
+  border-left: 2px dotted var(--swiss-green);
+  margin: 2em 0;
+  padding: 1em 1.5em;
+  background: var(--swiss-green-soft);
+  font-style: normal;
+  color: var(--swiss-text-secondary);
+  border-radius: 0;
+}
+
+.vp-doc blockquote p {
+  margin: 0.25em 0;
+}
+
+/* ----------------------------------------------------------------------------
+   6. 代码
+   ---------------------------------------------------------------------------- */
+
+.vp-doc code {
+  font-family: var(--swiss-font-mono);
+  font-size: 0.9em;
+  padding: 0.15em 0.35em;
+  background: var(--swiss-code-bg);
+  border: 1px solid var(--swiss-code-border);
+  border-radius: 2px;
+  color: var(--swiss-text);
+}
+
+.vp-doc :not(pre) > code {
+  color: var(--swiss-green-dark);
+  background: var(--swiss-green-soft);
+  border-color: var(--swiss-green-border);
+  font-weight: var(--swiss-font-medium);
+}
+
+.vp-doc pre {
+  background: var(--swiss-code-bg) !important;
+  border: 1px solid var(--swiss-code-border) !important;
+  border-radius: 0 !important;
+  padding: 1em 1.25em !important;
+  margin: 1.5em 0 !important;
+  box-shadow: none !important;
+  overflow-x: auto;
+}
+
+.vp-doc pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: var(--swiss-text);
+}
+
+div[class*='language-'] {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 4px 0 !important;
+  padding: 0 !important;
+}
+
+/* ----------------------------------------------------------------------------
+   7. 表格 — 极细线，干净
+   ---------------------------------------------------------------------------- */
+
+.vp-doc table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  border: 1px solid var(--swiss-border);
+  border-radius: 0;
+  overflow: visible;
+}
+
+.vp-doc th {
+  background: var(--swiss-bg-alt);
+  font-weight: var(--swiss-font-semibold);
+  color: var(--swiss-text);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--swiss-green);
+  text-align: left;
+}
+
+.vp-doc td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--swiss-divider);
+  color: var(--swiss-text-secondary);
+}
+
+.vp-doc tr:last-child td {
+  border-bottom: none;
+}
+
+.vp-doc tr:hover td {
+  background: var(--swiss-green-soft);
+}
+
+/* ----------------------------------------------------------------------------
+   8. 列表
+   ---------------------------------------------------------------------------- */
+
+.vp-doc ul,
+.vp-doc ol {
+  margin: 1.25em 0;
+  padding-left: 1.75em;
+}
+
+.vp-doc ul li,
+.vp-doc ol li {
+  margin-bottom: 0.4em;
+  line-height: var(--swiss-leading-normal);
+}
+
+/* 无序列表 — 方形标记，绿色（瑞士风格的克制装饰）*/
+.vp-doc ul li {
+  list-style-type: none;
+  position: relative;
+  padding-left: 0.75em;
+}
+
+.vp-doc ul li::before {
+  content: '—';
+  position: absolute;
+  left: -1.25em;
+  color: var(--swiss-green);
+  font-weight: var(--swiss-font-normal);
+}
+
+/* 有序列表保留数字 */
+.vp-doc ol li {
+  list-style-type: decimal;
+}
+
+.vp-doc ol li::marker {
+  color: var(--swiss-green);
+  font-weight: var(--swiss-font-medium);
+}
+
+/* ----------------------------------------------------------------------------
+   9. 水平线 — 三点几何装饰（70年代学术期刊风格）
+   ---------------------------------------------------------------------------- */
+
+.vp-doc hr {
+  border: none;
+  height: auto;
+  background: none;
+  text-align: center;
+  margin: 2.5em 0;
+}
+
+.vp-doc hr::before {
+  content: '·  ·  ·';
+  color: var(--swiss-text-tertiary);
+  font-size: 1.3em;
+  letter-spacing: 0.6em;
+}
+
+/* ----------------------------------------------------------------------------
+   10. 自定义容器
+   ---------------------------------------------------------------------------- */
+
+/* :::info — 荧光笔逐行高亮：每行文字背后各自一条绿色荧光笔划线 */
+.custom-block.info {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 2em 0;
+  padding: 0.6em 0.8em;
+  background: none;
+}
+
+/* 隐藏标签 */
+.custom-block.info::before {
+  content: none;
+}
+
+.custom-block.info p {
+  margin: 0.35em 0;
+  padding: 0;
+  line-height: 1.75;
+  /* 波点纹理：老纽约时报半色调网点，逐行覆盖文字 */
+  background: radial-gradient(circle, rgba(52, 199, 89, 0.28) 1.25px, transparent 1.25px);
+  background-size: 5px 5px;
+}
+
+/* :::detail — 延伸阅读框：左绿线 + 极淡底 */
+.custom-block.detail {
+  border: none;
+  border-left: 3px solid var(--swiss-green);
+  border-radius: 0;
+  box-shadow: none;
+  margin: 2em 0;
+  padding: 1.25em 1.5em;
+  background: var(--swiss-green-soft);
+}
+
+.custom-block.detail::before {
+  font-family: var(--swiss-font-cn);
+  font-weight: var(--swiss-font-semibold);
+  font-size: 0.85rem;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  color: var(--swiss-green);
+  display: block;
+  margin-bottom: 0.6em;
+  content: '详情';
+}
+
+/* :::details — 折叠块 */
+.custom-block.details {
+  border: none;
+  border-left: 3px solid var(--swiss-green);
+  border-radius: 0;
+  box-shadow: none;
+  margin: 2em 0;
+  padding: 1.25em 1.5em;
+  background: var(--swiss-green-soft);
+}
+
+.details-summary {
+  font-weight: var(--swiss-font-semibold);
+  margin: 0 0 0.5em;
+  color: var(--swiss-text);
+}
+
+.custom-block p {
+  margin: 0.5em 0;
+  line-height: var(--swiss-leading-normal);
+}
+
+/* ----------------------------------------------------------------------------
+   11. 覆盖 VitePress CSS 变量 — 瑞士极简
+   ---------------------------------------------------------------------------- */
+
+:root {
+  /* 品牌色 → 绿 */
+  --vp-c-brand: var(--swiss-green);
+  --vp-c-brand-light: var(--swiss-green);
+  --vp-c-brand-lighter: var(--swiss-green-dark);
+  --vp-c-brand-dark: var(--swiss-green-dark);
+  --vp-c-brand-darker: #1f8a35;
+
+  /* 背景 */
+  --vp-c-bg: var(--swiss-bg);
+  --vp-c-bg-alt: var(--swiss-bg-alt);
+  --vp-c-bg-elv: var(--swiss-bg);
+  --vp-c-bg-soft: var(--swiss-bg-alt);
+
+  /* 文本 */
+  --vp-c-text: var(--swiss-text);
+  --vp-c-text-1: var(--swiss-text);
+  --vp-c-text-2: var(--swiss-text-secondary);
+  --vp-c-text-3: var(--swiss-text-tertiary);
+
+  /* 边框 */
+  --vp-c-divider: var(--swiss-divider);
+  --vp-c-border: var(--swiss-border);
+  --vp-c-gutter: var(--swiss-border);
+
+  /* 功能色 */
+  --vp-c-success: var(--swiss-green);
+  --vp-c-warning: #c4943a;
+  --vp-c-danger: #c44a4a;
+  --vp-c-info: var(--swiss-green);
+
+  /* 字体 */
+  --vp-font-family-base: var(--swiss-font-body) !important;
+  --vp-font-family-mono: var(--swiss-font-mono) !important;
+
+  /* 阴影 — 全部禁用 (瑞士平面设计无阴影) */
+  --vp-shadow-1: none;
+  --vp-shadow-2: none;
+  --vp-shadow-3: none;
+
+  /* 圆角 — 锐利边缘 */
+  --vp-radius-small: 0;
+  --vp-radius-medium: 0;
+  --vp-radius-large: 0;
+
+  /* 布局宽度 */
+  --vp-layout-max-width: 95%;
+  --vp-sidebar-width: 300px;
+}
+
+/* ----------------------------------------------------------------------------
+   12. 导航栏 — 纯白，底线
+   ---------------------------------------------------------------------------- */
+
+.VPNavBar {
+  background-color: var(--swiss-bg) !important;
+  border-bottom: 1px solid var(--swiss-border) !important;
+  backdrop-filter: none;
+}
+
+.VPNavBarTitle .title {
+  font-family: var(--swiss-font-cn);
+  font-weight: var(--swiss-font-bold);
+  font-size: var(--swiss-text-lg);
+  color: var(--swiss-text) !important;
+}
+
+.VPNavBarMenuLink {
+  color: var(--swiss-text-secondary) !important;
+  font-weight: var(--swiss-font-normal);
+  font-family: var(--swiss-font-body);
+  transition: color 0.15s ease;
+}
+
+.VPNavBarMenuLink:hover,
+.VPNavBarMenuLink.active {
+  color: var(--swiss-green) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   13. 侧边栏 — 极淡灰，绿激活
+   ---------------------------------------------------------------------------- */
+
+.VPSidebar {
+  background-color: var(--swiss-bg-sidebar) !important;
+  border-right: 1px solid var(--swiss-border) !important;
+}
+
+.VPSidebarItem {
+  font-family: var(--swiss-font-body);
+  transition: color 0.15s ease;
+}
+
+.VPSidebarItem.level-0 {
+  font-weight: var(--swiss-font-semibold);
+  color: var(--swiss-text);
+}
+
+.VPSidebarItem.level-1,
+.VPSidebarItem.level-2 {
+  color: var(--swiss-text-secondary);
+}
+
+.VPSidebarItem:hover {
+  color: var(--swiss-green);
+  background-color: transparent;
+}
+
+.VPSidebarItem.active {
+  color: var(--swiss-green) !important;
+  background-color: var(--swiss-green-light);
+  border-left: 2px solid var(--swiss-green);
+}
+
+/* ----------------------------------------------------------------------------
+   14. 内容区域
+   ---------------------------------------------------------------------------- */
+
+.VPDoc {
+  background-color: var(--swiss-bg);
+}
+
+.VPDoc .container {
+  background-color: var(--swiss-bg);
+}
+
+.vp-doc {
+  font-family: var(--swiss-font-body);
+}
+
+/* 内容宽度 — Medium 式居中窄栏阅读体验 */
+.VPDoc .content {
+  max-width: 720px !important;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ----------------------------------------------------------------------------
+   14. 内容区域
+   ---------------------------------------------------------------------------- */
+
+.VPButton {
+  font-family: var(--swiss-font-body);
+  font-weight: var(--swiss-font-medium);
+  border-radius: 0 !important;
+  transition: background-color 0.15s ease !important;
+  box-shadow: none !important;
+}
+
+.VPButton.brand {
+  background-color: var(--swiss-green) !important;
+  border-color: var(--swiss-green) !important;
+  color: #fff !important;
+}
+
+.VPButton.brand:hover {
+  background-color: var(--swiss-green-dark) !important;
+  border-color: var(--swiss-green-dark) !important;
+  transform: none;
+  box-shadow: none !important;
+}
+
+.VPButton.alt {
+  background-color: transparent !important;
+  border: 1px solid var(--swiss-border) !important;
+  color: var(--swiss-text) !important;
+}
+
+.VPButton.alt:hover {
+  background-color: var(--swiss-bg-alt) !important;
+  border-color: var(--swiss-green) !important;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ----------------------------------------------------------------------------
+   17. 页脚
+   ---------------------------------------------------------------------------- */
+
+.VPFooter {
+  border-top: 1px solid var(--swiss-border) !important;
+  background: var(--swiss-bg);
+}
+
+/* ----------------------------------------------------------------------------
+   18. 搜索
+   ---------------------------------------------------------------------------- */
+
+.DocSearch-Button {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 1px solid var(--swiss-border) !important;
+  background: var(--swiss-bg) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   19. 图片
+   ---------------------------------------------------------------------------- */
+
+.vp-doc img {
+  max-height: 50vh;
+  width: auto;
+  display: block;
+  border-radius: 0;
+}
+
+.vp-doc img + em {
+  display: block;
+  text-align: center;
+  color: var(--swiss-text-tertiary);
+  font-size: 0.9em;
+  margin-top: 0.5em;
+  margin-bottom: 1.5em;
+}
+
+/* ----------------------------------------------------------------------------
+   20. 数学公式 — 干净底
+   ---------------------------------------------------------------------------- */
+
+.katex-display {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 1em 0;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  box-shadow: none;
+}
+
+/* ----------------------------------------------------------------------------
+   21. 页面过渡 — 无动画
+   ---------------------------------------------------------------------------- */
+
+.VPDoc {
+  animation: none;
+}
+
+/* ----------------------------------------------------------------------------
+   22. 滚动条 — 极简
+   ---------------------------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--swiss-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--swiss-border);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--swiss-text-tertiary);
+}
+
+/* ----------------------------------------------------------------------------
+   23. 响应式
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  :root {
+    --swiss-text-4xl: 1.75rem;
+    --swiss-text-3xl: 1.5rem;
+    --swiss-text-2xl: 1.25rem;
+    --swiss-text-xl: 1.125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .VPDoc .content {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --swiss-text-4xl: 1.5rem;
+    --swiss-text-3xl: 1.25rem;
+    --swiss-text-2xl: 1.125rem;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   24. mermaid / 图表
+   ---------------------------------------------------------------------------- */
+
+.mermaid {
+  text-align: center;
+  margin: 2em 0;
+}
+
+/* ----------------------------------------------------------------------------
+   25. 打印样式
+   ---------------------------------------------------------------------------- */
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .VPDoc .content {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .vp-doc p {
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  .vp-doc h1 { font-size: 24pt; }
+  .vp-doc h2 { font-size: 18pt; }
+
+  .custom-block.info,
+  .custom-block.detail,
+  .custom-block.details {
+    break-inside: avoid;
+    background: var(--swiss-green-soft) !important;
+  }
+
+  div[class*='language-'],
+  pre {
+    box-shadow: none !important;
+  }
+
+  /* 隐藏 UI */
+  .VPNav, .VPSidebar, .VPFooter, .VPLocalNav,
+  .prev-next, .pager, .DocSearch, .VPDocAside,
+  .VPBackToTop, .edit-info, .edit-link, .header-anchor,
+  .copy-code-button, .lang, .VPNavScreen, .announcement-banner,
+  nav, header, footer, aside,
+  button[class*="copy"] {
+    display: none !important;
+  }
+
+  @page {
+    margin: 20mm 25mm;
+  }
+
+  .VPContent, .VPDoc, .VPDoc .container, .VPDoc .content, .VPDoc .content-container {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .VPContent {
+    padding-top: 0 !important;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  pre, code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
+
+  h1, h2, h3, h4 { break-after: avoid; }
+  img { break-inside: avoid; max-width: 100% !important; }
+  .vp-doc { overflow-x: visible !important; }
+}

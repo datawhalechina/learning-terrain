@@ -118,6 +118,9 @@ export default defineConfig({
         socialLinks: [
           { icon: 'github', link: 'https://github.com/lizixi-0x2F/learning-terrain/' }
         ],
+        docFooter: {
+          next: false
+        },
         editLink: {
           pattern: 'https://github.com/lizixi-0x2F/learning-terrain/blob/main/docs/:path'
         },
@@ -203,6 +206,9 @@ export default defineConfig({
         socialLinks: [
           { icon: 'github', link: 'https://github.com/lizixi-0x2F/learning-terrain/' }
         ],
+        docFooter: {
+          next: false
+        },
         editLink: {
           pattern: 'https://github.com/lizixi-0x2F/learning-terrain/blob/main/docs/:path'
         },
