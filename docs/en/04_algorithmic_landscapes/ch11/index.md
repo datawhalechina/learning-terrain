@@ -6,6 +6,10 @@ In this chapter, we enter deep architectures. Here, space is no longer flat. Att
 
 These two architectures represent the two core geometric operations of deep learning: **bending the representation space** (Attention) and **constraining parameter motion** (LoRA). To understand their geometry is to understand the design language of modern deep architectures.
 
+![Backpropagation chain rule](/figures/ch11_backprop_chain_graph_tikz.svg)
+
+*Backpropagation chain rule. The gradient of loss $L$ flows downward: $\partial L/\partial y \rightarrow \partial L/\partial h \times \partial h/\partial \theta \rightarrow \nabla_\theta L \rightarrow$ update $\theta$. The chain rule is not a trick — it is the structural necessity of gradients flowing backward along the edges of the computation graph.*
+
 ![Attention: QKV Three-Axis Geometry](/figures/ch11_attention_qkv.svg)
 
 *The Q (orange), K (blue), and V (green) axes define the projection geometry of attention in the representation space. The inner product of Query and Key vectors in the Q-K plane ($QK^T$) determines similarity—dashed lines connect each Query to its best-matched Key. Value vectors encode the "attended-to" content along the V axis. The projection matrices of the three learn, during training, a Mahalanobis metric between tokens.*
@@ -25,6 +29,10 @@ Dividing by $\sqrt{d_k}$ prevents the variance of the inner product from explodi
 Finally, $V$ (Value) provides the content being "attended to." The attention weights compute a weighted average over the rows of $V$—each token's new representation is an **attention-weighted combination** of the Values of all tokens.
 
 The geometric perspective: **Attention builds a fully connected, weighted, data-dependent directed graph between tokens.** Tokens are nodes. Attention weights are edge strengths—pointing from Query tokens to Key tokens. This graph is recomputed at every layer, for every attention head. The projection matrices of $Q, K, V$—namely $W_Q, W_K, W_V$—define the "metric" on the graph: they determine which tokens are close to each other in the projection space.
+
+![Softmax attention landscape](/figures/ch11_attention_geometry_tikz.svg)
+
+*Softmax attention landscape. Sharp peaks emerge from flat inputs—the winner-take-all geometry of attention.*
 
 ![Multi-Head Attention: Parallel Subspaces](/figures/ch11_multihead_subspaces.svg)
 

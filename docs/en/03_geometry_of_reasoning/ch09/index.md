@@ -55,6 +55,10 @@ A large $\kappa$ means the terrain is non-uniform—some regions are extremely s
 
 **Theorem 2 (Association Between Ruggedness and Reasoning Failure)**. For Euler iteration with a fixed step size $\eta$, the probability of reasoning failure increases monotonically with $\kappa$. A rugged terrain means there are "steep slopes" along the path—a fixed $\eta$ may exceed the local $\eta_{\max}$, causing the system to diverge or jump into a wrong basin.
 
+![Rough vs smooth terrain](/figures/ch09_rough_vs_smooth_tikz.svg)
+
+*Rough vs smooth terrain. High-frequency ripples trap small models; large models smooth these out. $\kappa$—the roughness coefficient—quantifies this from the Hessian spectrum.*
+
 But the terrain is not immutable. Every training iteration, every gradient update, is reshaping this reasoning landscape.
 
 ## 9.3 The Landscape Reshaping Theorem of Training

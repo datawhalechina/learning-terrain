@@ -68,6 +68,10 @@ $$h_{t+1} = h_t + F_\theta(h_t, x_{t+1})$$
 
 where $F_\theta$ is the composite vector field of self-attention and FFN inside the Transformer layers (including residual connections). This is fully consistent with the form of ResNet (ch6, §6.11) and GPT autoregression (ch6, §6.13)—only in the context of chain of thought, the intermediate states $h_t$ are not arbitrary text-generation states, but correspond to conceptual stages of reasoning.
 
+![ResNet residual block computation graph](/figures/ch07_residual_block_graph_tikz.svg)
+
+*ResNet residual block computation graph. x forks: the main path through Weight→ReLU→Weight produces F_θ(x), while the skip connection feeds x directly to ⊕. Their sum x+F_θ(x) is the explicit Euler step h_{ℓ+1}=h_ℓ+f_θ(h_ℓ).*
+
 **Property 1 (Trajectory Continuity)**. $F_\theta$ is Lipschitz continuous with respect to $h_t$. When the step size $\eta = 1$, the magnitude of discrete jumps in the trajectory is bounded by $\|F_\theta(h_t, x_{t+1})\|$. Small magnitude of $F_\theta$ means the hidden state evolves smoothly between adjacent steps—this is precisely the geometric signature of coherent reasoning. Large-magnitude jumps—"ruptures"—correspond to logical leaps or errors in reasoning.
 
 **Property 2 (Self-Driven Nature)**. $F_\theta(h_t, x_{t+1})$ depends on $x_{t+1}$—the token that the model **itself chooses**. Chain of thought is a **self-driven** dynamical system: the model chooses a direction at each step (by choosing a token), and then advances along that direction. This "push-oneself" structure makes the chain-of-thought trajectory richer than that of feedforward ResNets—and also more dangerous: a single wrong choice can push the trajectory toward a completely wrong attractor.
@@ -151,6 +155,22 @@ Placing chain of thought within the framework of the Yonglin Limit (ch5, §5.9),
 3. The minimum number of reasoning steps: $T_{\min} \geq \log(\epsilon / D_0) / \log k$, where $D_0 = D_{\mathrm{KL}}(p^*\|p_0)$.
 
 This theorem turns the abstract guarantees of ch5 into direct constraints on chain of thought. The larger $D_0$ (the farther the initial belief is from the correct answer), the larger $T_{\min}$—but only logarithmically: if $D_0$ increases tenfold, the number of steps increases by only about $-\log_{1/k}(10)$ steps. The smaller $k$ (faster contraction, stronger model), the fewer steps needed. The two are related logarithmically—this is the "free lunch" that the exponential convergence rate of contraction mappings bestows upon chain of thought.
+
+![DEQ fixed-point iteration computation graph](/figures/ch07_fixed_point_deq_graph_tikz.svg)
+
+*DEQ fixed-point iteration. h_k enters f_θ, output h_{k+1} feeds back as input. The convergence check ||h_{k+1}-h_k||<ε decides when the structure has closed — the fixed point h*=f_θ(h*,x) is not computed, it is converged to.*
+
+![Ring-shaped fixed point basin](/figures/ch07_fixed_point_basin_tikz.svg)
+
+*Ring-shaped fixed point basin $(\theta_1^2+\theta_2^2-1)^2$. Fixed points can be entire manifolds, not just isolated points.*
+
+![Fixed point attractor](/figures/ch07_fixed_point_tikz.svg)
+
+*Fixed point attractor: $F(x^*)=x^*$. Four trajectories from different starting points all converge to the same structure.*
+
+![Cobweb diagram](/figures/ch07_cobweb_tikz.svg)
+
+*Cobweb diagram for $x_{t+1}=f(x_t)$. The intersection of $y=f(x)$ and $y=x$ is the fixed point; the staircase shows convergence.*
 
 ---
 

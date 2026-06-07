@@ -82,6 +82,10 @@ This is the terrain of learning.
 
 *Loss terrain in parameter space: the elliptical bowl-shaped surface corresponds to the anisotropic loss $L = \theta_1^2 + 3\theta_2^2$, the orange trajectory is the gradient descent path starting from the initial point, and the green dot is the convergence endpoint. Note that the trajectory does not plunge straight down but bends along the curvature of the terrain — this is precisely the meaning of "motion" rather than "parameter tuning."*
 
+![Anisotropic Loss Landscape](/figures/ch01_anisotropic_landscape_tikz.svg)
+
+*Anisotropic loss landscape $L=\theta_1^2+3\theta_2^2$. The steep $\theta_2$ direction forces small steps; the flat $\theta_1$ direction allows large steps. Terrain matters.*
+
 ## 1.3 But What Exactly Is "Space"?
 
 In the previous two sections we kept talking about "space," "terrain," "motion," as if the meanings of these words were self-evident. But if we stop and seriously ask — **what exactly is space?** — we will discover that the answer to this question is far from something as simple as "a place that holds things."
@@ -207,6 +211,10 @@ $$S_{t+1} = S_t + \eta F_\theta(S_t, x)$$
 Here $S_t$ is the current state of the system, $x$ is the input, $F_\theta$ is some update field determined by the model, and $\eta$ is the step size. If $S_t$ is parameters, this is training. If $S_t$ is hidden representations, this is feature evolution in a deep network. If $S_t$ is a belief distribution, this is belief update during reasoning. If in the end $S^* = F_\theta(S^*, x)$ is satisfied, that is a fixed point — the system has found a position where its own push on itself is exactly zero.
 
 This formula places learning, reasoning, state updates, residual networks, Transformer blocks, and fixed-point models all into the same language: **the current state, driven by a field, moves toward the next state.** It will be the central equation running through the entire book.
+
+![State Trajectory](/figures/ch01_state_trajectory_tikz.svg)
+
+*State trajectory: dynamics is a chain of state updates $x_0\to x_1\to x_2\to\cdots$, not a single computation.*
 
 ## 1.8 The Geometric Intuition of Reasoning
 

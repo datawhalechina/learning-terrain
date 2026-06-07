@@ -38,6 +38,10 @@ $$p_{t+1} = \text{proj}_{\Delta}(p_t + \eta F_x(p_t))$$
 
 where $\eta$ is the step size and $\text{proj}_{\Delta}$ is the Bregman projection onto the simplex. The implicit trajectory of the chain of thought (ch7) is precisely the process of traveling along some orbit in $F_x$.
 
+![Reasoning field computation graph](/figures/ch08_reasoning_field_graph_tikz.svg)
+
+*Reasoning field computation graph. Input $x$ is encoded as $h_0$. The reasoning field $F_x$ is applied repeatedly: $h_{t+1}=h_t+\eta \cdot F_x(h_t)$. Hidden states unfold across time — each application of $F_x$ is the same reasoning operator, iterated until convergence to $h^*$, then decoded to output $y$.*
+
 With the definition of the field in hand, a natural question emerges: **what special positions exist in the field—those places where the model "stops in its tracks"?**
 
 ## 8.2 Classification of Fixed Points and Attractors
@@ -68,6 +72,10 @@ If that place happens to be the human-defined correct answer—we say the model 
 
 This is why the model confidently makes mistakes. It is not "guessing wrong"—it is walking, with exactly the same determinism, toward an incorrect fixed point. Its trajectory is mathematically just as smooth, just as continuous, just as convergent as the trajectory toward the correct fixed point. An incorrect belief is a form of **geometric correctness**—inside the wrong basin, all arrows point toward the basin center.
 :::
+
+![Three attractor basins](/figures/ch08_attractor_basins_tikz.svg)
+
+*Three attractor basins: correct answer (deepest), plausible wrong answer, and common mistake. The reasoning field determines which basin captures the trajectory.*
 
 These classifications answer "why does the model produce wrong answers"—but another question is more fundamental: **where do incorrect attractors come from?** They are not random—they are pits carved into the energy landscape by the statistical structure of the training data.
 

@@ -64,6 +64,8 @@ In deep learning, we almost never draw phase portraits—the dimensionality of p
 
 To understand dynamical systems is to learn to draw phase portraits in your mind—even when you cannot draw them on paper.
 
+![Double-well potential $L=(\theta_1^2-1)^2+\theta_2^2$. Two minima separated by a saddle: which basin you fall into depends on where you start.](/figures/ch06_phase_portrait_tikz.svg)
+
 ## 6.4 Fixed Points: Where the System Comes to Rest
 
 The most important class of special states in a dynamical system is the **fixed point** (also called equilibrium point or critical point).
@@ -79,6 +81,8 @@ But not all fixed points are attracting. The **stability** of a fixed point depe
 - **Saddle point**: some directions are attracting, some are repelling. A mountain pass—attracting along the valley direction, repelling over the pass.
 
 In ch3, we performed exactly the same classification of critical points via the eigenvalues of the Hessian. That was the direct application of dynamical systems stability theory to optimization: local minima = asymptotically stable fixed points, local maxima = unstable fixed points, saddle points = saddle points. Different language, the same geometric fact.
+
+![Saddle point with stable (converging) and unstable (diverging) directions. Not all fixed points attract.](/figures/ch06_saddle_point_tikz.svg)
 
 ## 6.5 Formalizing the Lyapunov Function
 
@@ -98,6 +102,8 @@ If such a $V$ exists, the fixed point $S^*$ is **asymptotically stable**—from 
 The elegance of the Lyapunov function lies in this: **you do not need to solve $F(S) = 0$, you do not need linearization, you do not need eigenvalues. You only need to guess a $V$, then verify that it decreases monotonically along $F$.** Guess right, and the proof of stability is complete.
 
 This is why in ch3 we said "the loss function is a Lyapunov function": $L(\theta) \geq 0$ (positive definite), $L(\theta^*) = 0$ (zero at the minimum), $\langle \nabla L, -\nabla L \rangle = -\|\nabla L\|^2 < 0$ (strictly decreasing along the gradient descent trajectory, as long as not at a critical point). All three conditions are satisfied—the descent of the loss is the descent of the Lyapunov energy. Convergence is not hoped for; it is geometrically enforced.
+
+![Convergence curve: $E(x_t)$ decreasing monotonically toward $E^*$. The dashed line marks the energy floor.](/figures/ch06_convergence_curve_tikz.svg)
 
 ## 6.6 The Stability Spectrum: From Exponential Convergence to Chaos
 
@@ -156,6 +162,10 @@ The most famous example is **numerical instability**: a fixed point of the conti
 More subtly, discretization can **introduce new fixed points**. A continuous system has only one fixed point, but its Euler discretization may, at larger $\eta$, exhibit two or more fixed points—some of which are "spurious," vanishing in the limit $\eta \to 0$. Such spurious fixed points can trap the model during training—the model stops in a "ghost valley" of the discretization, rather than in a true minimum.
 
 This is also why very low learning rates (small $\eta$) are generally safer—they not only make the discrete trajectory approximate the continuous flow more accurately, but also reduce the "ghost structures" introduced by discretization.
+
+![One training iteration computation graph](/figures/ch06_training_loop_graph_tikz.svg)
+
+*One training iteration. Data→Forward→Loss L(θ)→Gradient ∇L(θ)→Update θ→loop. These five steps form the minimal cyclic unit of learning dynamics.*
 
 ## 6.10 Depth as Time: How Dynamical Systems Become Architecture
 

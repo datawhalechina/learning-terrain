@@ -148,6 +148,10 @@ In representation space, moving along the directions of the manifold should corr
 
 *Left: Swiss Roll — a two-dimensional manifold in three-dimensional space. The data points appear to be distributed within a three-dimensional volume, but in fact they occupy only a rolled-up two-dimensional surface (color varies smoothly along the manifold directions). Middle: the unfolded manifold — representation learning "irons out" the manifold so that the intrinsic coordinates along the manifold (rotation angle, height) become Euclidean coordinates. Right: a one-dimensional manifold embedded in two-dimensional space — even if there is only a curve, there is noise in the orthogonal direction around it (short gray lines); the goal of representation learning is to separate manifold directions from noise directions.*
 
+![Nonlinear Manifold Projection](/figures/ch02_manifold_projection_tikz.svg)
+
+*Nonlinear manifold projection from parameter space to representation space. The mesh surface shows how points in the parameter plane ($\theta_1,\theta_2$) are mapped through a nonlinear transformation $f_\theta$ into structured representations. Different parameter positions (red $\theta_a$, blue $\theta_b$, orange $\theta_c$) produce different representational geometries — changing the body's position changes the projection.*
+
 ## 2.7 Word Embeddings: When Semantics Becomes Geometry
 
 The most intuitive, and also most striking, example of representation space comes from word embeddings in natural language processing.

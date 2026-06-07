@@ -6,6 +6,10 @@
 
 这两个架构代表了深度学习的两个核心几何操作：**弯曲表示空间**（Attention）和**约束参数运动**（LoRA）。理解它们的几何，就是理解现代深度架构的设计语言。
 
+![反向传播链式法则计算图](/figures/ch11_backprop_chain_graph_tikz.svg)
+
+*反向传播的链式法则计算图。损失 L 的梯度自上而下流动：∂L/∂y→∂L/∂h×∂h/∂θ→∇_θL→更新 θ。链式法则不是技巧——是梯度在计算图中沿边反向传播的结构必然。*
+
 ![Attention：QKV三轴几何](/figures/ch11_attention_qkv.svg)
 
 *Q（橙）、K（蓝）、V（绿）三轴定义了注意力在表示空间中的投影几何。Query和Key向量在Q-K平面上的内积（$QK^T$）决定了相似度——虚线连接每个Query与其最匹配的Key。Value向量沿V轴编码被"注意"的内容。三者的投影矩阵在训练中学习到的是token之间的马氏度量。*
@@ -23,6 +27,10 @@ $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)
 除以 $\sqrt{d_k}$ 是为了防止内积的方差随维度增长而爆炸——这是高维空间中随机向量几乎正交的自然结果（ch2, §2.4）。然后 softmax 将相似度转换为概率分布——每个 token 对其他 token 的注意力权重。
 
 最后，$V$（Value）提供被"注意"的内容。注意力权重将 $V$ 的行加权平均——每个 token 的新表示是所有 token 的 Value 的**注意力加权组合**。
+
+![Softmax注意力景观](/figures/ch11_attention_geometry_tikz.svg)
+
+*Softmax 函数将 $QK^T/\sqrt{d_k}$ 的原始相似度分数映射为注意力权重——在概率单纯形上形成一个"注意力景观"。横轴表示不同的 Key token，纵轴为注意力权重。温度 $1/\sqrt{d_k}$ 控制 softmax 的"锐度"：温度越低，注意力越集中于最相似的 token（one-hot 化）；温度越高，注意力越均匀分布。这个景观决定了每个 Query 如何"看见"整个序列——它是推理场 $F_x$ 在 token 关系空间中的一个局部投影。*
 
 几何视角：**Attention 在 token 之间建立了一个完全连通的、加权的、数据依赖的有向图。** Token 是节点。注意力权重是边的强度——从 Query token 指向 Key token。这个图在每一层、每一个注意力头上都被重新计算。$Q, K, V$ 的投影矩阵——$W_Q, W_K, W_V$——定义了图中的"度量"：它们决定了哪些 token 在投影空间中彼此靠近。
 

@@ -52,6 +52,14 @@ These three loss functions produce three different ways of "sculpting the terrai
 
 Now, imagine you are already standing at some position in this wilderness. The loss function tells you the elevation under your feet—but you still need to know one thing: **in which direction will the elevation decrease?**
 
+![3D Loss Bowl](/figures/ch03_loss_bowl_tikz.svg)
+
+*3D loss bowl $L=\theta_1^2+\theta_2^2$. Every point on this surface is a possible model state; training is descent toward the bottom.*
+
+![Gradient Descent Trajectory on Loss Bowl](/figures/ch03_loss_bowl_trajectory_tikz.svg)
+
+*Gradient descent trajectory on the loss bowl. Red path shows the descent from initialization to minimum.*
+
 ## 3.3 Gradient: A Vector of Partial Derivatives
 
 With the loss function $L(\theta)$ in hand, the next step is knowing which direction to walk to reduce the loss.
@@ -74,6 +82,10 @@ In deep networks, gradients are computed via backpropagation. Backpropagation is
 
 *The gradient field of a non-convex loss function $L = \theta_1^2 + 2\theta_2^2 + 1.5\sin(1.8\theta_1)\cos(1.8\theta_2)$. The blue background shows loss contours, and the vermilion arrows point in the negative gradient direction (steepest descent). The orange trajectory is a gradient descent path, sliding step by step from the starting point (circle) to the endpoint (square). The diamond marks a saddle point—where the gradient is zero, but some directions go uphill and others go downhill.*
 
+![Vector Field](/figures/ch03_vector_field_tikz.svg)
+
+*Vector field $v(x)=-x$: every point in space has a preferred direction. The origin $x^*$ is a global attractor.*
+
 Now you know the slope under your feet. But how should you take a step? How large should each step be? This leads to a question that is equally ancient in physics and mathematics: **how do you turn a continuous motion into a step-by-step discrete walk?**
 
 ## 3.4 Explicit Euler Method: Gradient Descent as a Discrete Dynamical System
@@ -85,6 +97,10 @@ The most natural idea is: at each step, walk a small distance in the negative gr
 $$\theta_{t+1} = \theta_t - \eta \nabla L(\theta_t)$$
 
 where $\eta > 0$ is the learning rate, also called the step size.
+
+![Computation Graph of Gradient Descent](/figures/ch03_gradient_descent_graph_tikz.svg)
+
+*Computation graph of gradient descent. θ_t → ∇L(θ_t) → -η·∇L → θ_{t+1}, with a feedback loop below. Each training step is one execution of this graph.*
 
 This formula is not arbitrary. It is the **explicit Euler method** applied to discretize the ordinary differential equation $\frac{d\theta}{dt} = -\nabla L(\theta)$.
 
@@ -248,6 +264,10 @@ This is not a philosophical metaphor. Lyapunov turned it into a theorem in 1892.
 The deep learning community spent thirty years evolving optimizers from SGD to AdamW. But from Lyapunov's perspective, these are all different discretization schemes for the same thing—the same vector field, different step-size strategies. When you switch optimizers, you are not switching "algorithms"—you are switching walking styles. And what the walking style changes is not whether you can reach a destination—but which destination you reach. The noise of SGD pushes you into flat basins; the adaptive stride of Adam pulls you to the bottom of narrow valleys. You did not "choose an optimizer"—you chose a destination.
 
 :::
+
+![Energy Contours with Gradient Descent](/figures/ch03_energy_contour_tikz.svg)
+
+*Energy contours with gradient descent path. Ellipses are level sets of $E(x)$; arrows show $x_{t+1}=x_t-\eta\nabla E(x_t)$.*
 
 ## 3.8 Putting It All Together: A Terrain Narrative of One Training Run
 

@@ -4,6 +4,8 @@ At the end of the previous chapter, we stood before a contradiction.
 
 On the one hand, we had acquired a complete language of terrain—the loss function describes the rises and falls of the ground, the gradient points out the direction of the steepest slope beneath our feet, Euler's method turns continuous descent into discrete steps, and the Hessian helps us distinguish valleys, saddle points, and minima at critical points. We also saw three radically different walking strategies—SGD, Momentum, and Adam—whose trajectories across narrow-valley terrain differ so dramatically they hardly seem to be traveling the same wilderness.
 
+![SGD (red), Momentum (orange), and Adam (blue) on the same loss bowl. Different walking strategies produce different paths to the same minimum.](/figures/ch04_optimizer_paths_tikz.svg)
+
 On the other hand, an unresolved question still hung over all of it: **How should you choose the step size? Should the step size change over time? And more importantly—can you reshape the terrain itself?**
 
 A wilderness hiker does not merely walk. A clever hiker installs guardrails along cliffs, lays planks across marshes, and levels out excessively rugged mountain paths. He does not just read the map—he alters the map.
@@ -21,6 +23,12 @@ Too small—you are certainly safe. Each step proceeds precisely along the direc
 Too large—you move fast. But this wilderness is not smooth. In the instant you take a great stride, the curvature of the terrain may already have changed. You might step into thin air and fall off a cliff—loss no longer decreases but spikes upward. Or you might leap right over a narrow but extremely deep valley floor and land in a suboptimal broad basin.
 
 Thus the choice of step size is, at heart, a **compromise between continuous terrain and discrete footsteps**. In the continuous world, the gradient flow $\frac{d\theta}{dt} = -\nabla L(\theta)$ is perfect—it follows a smooth curve, approaching the minimum arbitrarily closely. But in the discrete world, we can only sample the flow with finite-sized steps $\eta$. The smaller $\eta$, the closer the discrete trajectory to the continuous solution; the larger $\eta$, the larger the discretization error, until beyond some critical point—the discrete system loses stability entirely and diverges to infinity.
+
+![Euler step decomposition: $x_{t+1}=x_t+\eta v(x_t)$. The update is the velocity direction scaled by the learning rate.](/figures/ch04_euler_step_tikz.svg)
+
+![Computation Graph of Euler Step](/figures/ch04_euler_step_graph_tikz.svg)
+
+*Euler step computation graph. x_t splits into two paths: one through v(x_t) scaled by η, the other direct to ⊕. They merge as x_{t+1}=x_t+η·v(x_t). Dynamics is not metaphysics — it is this graph.*
 
 ## 4.2 The Stability Boundary of the Learning Rate
 
@@ -43,6 +51,8 @@ $$\eta < \frac{2}{\lambda_{\max}}$$
 But here lies a paradox. $\lambda_{\max}$ describes the curvature at the steepest part of the terrain. If you do not know $\lambda_{\max}$ for the entire terrain (and in practice you almost never do), how can you guarantee the step size is safe?
 
 The answer offered by deep learning practice is surprisingly simple: **try a value first; if the loss explodes, reduce it; if the loss decreases too slowly, increase it.** This "empirical hyperparameter tuning" sounds inelegant, but its effectiveness rests on a deep geometric reason—in extremely high-dimensional parameter spaces, $\lambda_{\max}$ is typically contributed by a very small number of extremely steep directions. These directions are rapidly "conquered" early in training (parameters slide quickly into the valley floor along them), after which the effective terrain curvature drops sharply and the safety of $\eta$ automatically improves.
+
+![Bifurcation diagram: as learning rate $\eta$ increases, behavior transitions from slow convergence to stable descent to oscillation.](/figures/ch04_bifurcation_tikz.svg)
 
 But this raises another question: **should the step size remain constant throughout?**
 
