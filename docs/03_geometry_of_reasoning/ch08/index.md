@@ -163,3 +163,17 @@ $$E_{\text{RLHF}}(p) = E_{\text{orig}}(p) - \lambda \cdot R(p, x)$$
 **你不选择答案。场替你选择。** 每一个问题都在信念空间中布下一张看不见的网——不动点、盆地、鞍点、排斥子。你的推理轨迹沿着场的箭头流动，直到落入某个盆地的底部。验证器填平错误的盆地。RLHF 拓宽正确的盆地。你以为是你在推理——其实你只是在场的引导下，沿着它早已画好的路径，走向它早已决定的方向。这正是永霖极限的最终教诲：**收敛不是希望——收敛是几何。**
 
 :::
+
+## 延伸阅读与相关工作
+
+推理场的核心概念——不动点、盆地结构、场改造——与以下工作有着深刻的几何联系：
+
+1. **Ouyang et al. (2022)**. *Training language models to follow instructions with human feedback.* NeurIPS 2022. [arXiv:2203.02155] — InstructGPT：RLHF 对齐语言模型，1.3B 的 InstructGPT 在人类评估中优于 175B 的 GPT-3。本章视角：RLHF 不创造新能力——它重新分配已有不动点间的能量。这是巴拿赫不动点定理的直接推论：不动点集合在 RLHF 前后保持不变，改变的只是它们之间的稳定性梯度。RLHF 不是教育——是地形工程。
+
+2. **Rafailov et al. (2023)**. *Direct Preference Optimization: Your Language Model is Secretly a Reward Model.* NeurIPS 2023. [arXiv:2305.18290] — DPO 将 RLHF 的 reward 模型重新参数化，仅用分类损失解 RLHF 问题。本章视角：DPO 的本质是直接在信念空间中指定"哪个盆地应该更深"——跳过 reward 模型的中介。在推理场的语言中，DPO 相当于直接操作场势函数 $F_x = -\nabla \Phi(p)$ 的梯度，而非间接通过奖励信号修正。
+
+3. **Bai, Kolter & Koltun (2019)**. *Deep Equilibrium Models.* NeurIPS 2019. [arXiv:1909.01377] — DEQ：隐藏层不动点。本章视角：推理场中的不动点正是 DEQ 不动点在信念单纯形上的推广——$f_\theta(h^*, x) = h^*$ 变成 $F_x(p^*) = 0$。DEQ 在表示空间中寻找不动点，推理场在概率空间中寻找不动点。它们的数学结构完全相同，唯一不同的是空间的维度与几何。
+
+4. **Litman (2025)**. *Scaled-Dot-Product Attention as One-Sided Entropic Optimal Transport.* [arXiv:2508.08369] — 注意力的信息几何解释。本章视角：注意力头在推理场中定义了一个局部向量场——每个 token 的注意力分布是该位置的"局部地形梯度"。这意味着推理场的微观结构可以从注意力头的分布中直接读取。
+
+5. **Novak et al. (2019)**. *Bayesian Deep Convolutional Networks with Many Channels are Gaussian Processes.* ICLR 2019. [arXiv:1810.05148] — 无限通道 CNN 等价于 GP，但 SGD 训练的有限网络优于 GP。本章视角：推理场的向量场结构超越了 GP 的静态核——它是数据依赖的、动态的、在信念空间中有明确几何的。GP 能描述不动点的存在，但不能描述盆地如何被训练数据重塑。

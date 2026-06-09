@@ -153,3 +153,17 @@ $$\mathbb{P}(\text{escape}) \approx 1 - \exp\left(-\frac{t}{t_0} \cdot \exp\left
 **地形决定步伐。** 你不选择推理需要多少步——山脊的崎岖程度替你选了。你不判断何时应该停下来——信念的凝固程度替你判了。温度是逃生工具。规模是平滑器。训练是地形改造工程。卷三在此收束。十二个章节的几何之旅，还有最后一站——卷四：算法的地貌学。在那里，我们将用这整套语言重新审视那些你以为了解的经典算法，发现它们从未如此清晰。
 
 :::
+
+## 延伸阅读与相关工作
+
+推理地貌学的核心主题——长度由地形几何决定、崎岖度量化、温度作为逃逸工具、KL 凝固判据——在以下工作中得到深刻呼应：
+
+1. **DeepSeek-AI (2025)**. *DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning.* Nature 2025. [arXiv:2501.12948] — 推理能力的涌现与 test-time compute scaling。本章视角：R1 的"aha moment"对应信念空间中轨迹恰好穿过崎岖地形的临界鞍点——涌现不是魔法，是路径在参数/数据临界点处变得连续可通行。本章定理 4（规模平滑地形）为这种涌现提供了直接的几何解释。
+
+2. **Li et al. (2024)**. *A Sharp Convergence Theory for The Probability Flow ODEs of Diffusion Models.* [arXiv:2408.02320] — 概率流 ODE 的 $d/\epsilon$ 迭代收敛理论。本章视角：扩散模型概率流 ODE 的收敛速率和本章思维链收敛速率共享同一个数学结构——都是概率空间中压缩映射的必然结果。扩散模型中的 $d$（数据维度）对应推理中初始信念分布的复杂度——两者都决定了达到给定精度 $\epsilon$ 所需的最小迭代步数。
+
+3. **Song et al. (2021)**. *Score-Based Generative Modeling through Stochastic Differential Equations.* ICLR 2021 Oral. [arXiv:2011.13456] — score-based SDE 统一扩散和生成。本章视角：逆扩散的 SDE 正是本章"温度辅助逃逸"的连续时间版本——噪声幅度 $T$ 在生成和推理中扮演同一个角色：从浅盆地逃逸的随机驱动力。二者的 Arrhenius 逃逸率公式完全相同——这暗示了生成与推理之间比表面更深的统一性。
+
+4. **Mandt, Hoffman & Blei (2017)**. *Stochastic Gradient Descent as Approximate Bayesian Inference.* JMLR 2017. [arXiv:1704.04289] — SGD 的平稳分布。本章视角：推理中的温度与 SGD 的学习率——两者都是控制"探索 vs. 利用"的地形参数，只是作用在不同的空间中（信念空间 vs. 参数空间）。这一平行关系暗示了一个更深层的对称性：训练动力学和推理动力学可能是同一个地形框架在两个不同空间中的投影。
+
+5. **Kaplan et al. (2020)**. *Scaling Laws for Neural Language Models.* [arXiv:2001.08361] — 语言模型损失的幂律缩放。本章视角：更大的模型 = 更光滑的能量地形 = 更短的推理路径。这是定理 4（规模-平滑度假说）的直接证据：参数数量每增加一个数量级，推理场崎岖度降低，压缩因子 $k$ 减小，推理所需步数 $T_{\min}$ 随之缩短。

@@ -169,3 +169,15 @@ Every formula you've memorized—$\hat{\beta} = (X^TX)^{-1}X^Ty$, $\max \frac{2}
 **Every formula you've ever learned is a contour line of a landscape.** The $\hat{\beta} = (X^TX)^{-1}X^Ty$ of linear regression is the coordinate of the bottom of an elliptical bowl. The eigenvectors of PCA are the directions of the longest axes of the data cloud. The maximum margin of SVM is the widest gap between two classes of data. When you look at formulas, you see algebraic symbols. When you lift your head—you see mountains, basins, gaps, and axes. This is geometry. Volume IV has just begun. Next chapter: Attention and LoRA—the geometry of deep architectures.
 
 :::
+
+## Further Reading and Related Work
+
+This chapter's geometric perspective places classical algorithms back into the space where they naturally belong—the terrain of parameter space and data space. The following works extend this viewpoint in different directions.
+
+**Bayesian Deep Convolutional Networks with Many Channels are Gaussian Processes.** Novak et al. (2019) [arXiv:1810.05148]——Infinitely wide CNNs are equivalent to Gaussian processes in distribution. This result builds a bridge between classical kernel methods and deep networks: when you push width to infinity, the uncertainty quantification of your network degenerates back to a kernel method you have known for a hundred years.
+
+**Neural Tangent Kernel: A Survey.** Golikov et al. (2022) [arXiv:2208.13614]——A comprehensive survey of the Neural Tangent Kernel. In the infinite-width limit, the training dynamics of deep networks are entirely described by the NTK—gradient descent in function space becomes kernel ridge regression. Classical algorithms are not replaced by deep networks; they are embedded as limiting cases within deep network theory.
+
+**Batch Normalization.** Ioffe & Szegedy (2015) [arXiv:1502.03167]——Layer-wise normalization redefines the coordinate scale in parameter space. From the geometric perspective of this chapter, BN keeps the condition number of the Hessian manageable—preventing the terrain from becoming too rugged or too flat during training. It is not an optimization trick; it is a curvature regulator.
+
+**Explaining and Harnessing Adversarial Examples.** Goodfellow, Shlens & Szegedy (2015) [arXiv:1412.6572]——The linear explanation of adversarial examples. The local linearity of deep networks means that along directions where parameter space is locally too flat, a tiny perturbation in input space can cause a huge change in output. Adversarial vulnerability is the flip side of smoothness—the smoother you are, the easier you are to mislead.

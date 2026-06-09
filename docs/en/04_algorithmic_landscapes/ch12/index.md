@@ -157,3 +157,21 @@ The terrain of learning unfolds beneath your feet.
 **— Li Zixi (Mr. Pallas's Cat), 2026, Sun Yat-sen University**
 
 :::
+
+## Further Reading and Related Work
+
+This chapter is the terminus of the entire book. From Newton in 1687 to diffusion models in 2020, 337 years of scientific thought are threaded together by a single geometric line. The following works are not isolated papers—they are key stations along this arc.
+
+**Denoising Diffusion Probabilistic Models.** Ho, Jain & Abbeel (2020) [arXiv:2006.11239]——The original DDPM paper, inspired by nonequilibrium thermodynamics, brought diffusion models into the mainstream. It designs the forward process as a fixed noise schedule, allowing the reverse process to be trained with a simple MSE loss. The geometric interpretation of this chapter: forward is entropy increase, reverse diffusion is entropy decrease—noise to structure is the flow of a dynamical system along a score field.
+
+**Score-Based Generative Modeling through Stochastic Differential Equations.** Song et al. (2021) [arXiv:2011.13456]——Unifies diffusion models and score-based models in a single SDE framework. The emergence of the probability flow ODE means: reverse diffusion is not only a stochastic process but also a deterministic dynamical system—equivalent to a Neural ODE (see below). This work fully unifies diffusion with the dynamical systems language of ch6.
+
+**Improved Denoising Diffusion Probabilistic Models.** Nichol & Dhariwal (2021) [arXiv:2102.09672]——Learning the reverse variance reduces sampling steps from 1000 to about 100. Geometric explanation: smoother probability flow ODE trajectories allow larger integration step sizes—a recurrence of the adaptive step-size idea from ch4 in data space.
+
+**A Sharp Convergence Theory for The Probability Flow ODEs of Diffusion Models.** Li et al. (2024) [arXiv:2408.02320]——A $d/\varepsilon$ convergence theory for probability flow ODEs: approximating the ODE trajectory requires $O(d/\varepsilon)$ steps given data dimension $d$ and target error $\varepsilon$. This is the "Yonglin limit" for diffusion models—sharing the exact same mathematical structure as the KL convergence guarantee in ch5 and the chain-of-thought step lower bound in ch7: **convergence requires steps, and the number of steps is determined by the geometry of the terrain.**
+
+**Neural Ordinary Differential Equations.** Chen et al. (2018) [arXiv:1806.07366]——Neural ODE pushes the discrete layers of residual networks to continuous depth. The probability flow ODE is a special case of Neural ODE in diffusion models—the reverse process is a continuous-time dynamical system from noise to data. The loop of the entire book—from Newtonian mechanics (ch1) to dynamical systems (ch6) to diffusion models (ch12)—closes here.
+
+**Language Models are Few-Shot Learners.** Brown et al. (2020) [arXiv:2005.14165]——GPT-3, a 175B-parameter autoregressive language model. In the geometric framework of this chapter, autoregressive generation is the hidden state taking one step along the reasoning field in belief space—each generated token is one step, equivalent to one denoising step in the reverse diffusion process. Diffusion models are generation in continuous space; autoregressive models are generation in discrete space. The two are two sides of the same coin.
+
+**Scaling Laws for Neural Language Models.** Kaplan et al. (2020) [arXiv:2001.08361]——Scaling laws reveal a power-law relationship between model capacity and performance. In the unified geometric language of the entire book: larger model = smoother energy landscape = shorter inference paths = deeper basins = better generalization. Scaling laws are not about parameter count—they are about the smoothness of the terrain and the depth of the basins.

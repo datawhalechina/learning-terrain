@@ -344,3 +344,17 @@ In the next chapter, we will focus on the walking itself: **how different optimi
 **The loss function paints a terrain on parameter space. The gradient tells us which way the ground tilts underfoot. The Euler step pushes us to the next position.** But how large should the step be? Walk in a straight line or carry momentum? Different terrains require different ways of walking—this is the story of optimizers. In the next chapter, we will compare SGD, Momentum, Adam, and various adaptive methods: they are not merely "different update formulas," but different walking strategies applied to the same terrain. Walk the right way, and even flat ground can lead to the valley bottom; walk the wrong way, and a single step near a cliff can send you tumbling down.
 
 :::
+
+## Further Reading and Related Work
+
+The geometry of the loss terrain is being mapped from multiple angles. Here are five key charts.
+
+**Emergent properties of local geometry.** Fort & Ganguli (2019) [arXiv:1910.05929] — the curvature of the loss landscape is not random: the number of positive-curvature directions equals the number of classes in the dataset. The terrain's structure mirrors the classification structure of the data.
+
+**Flat minima and generalization.** Keskar et al. (2017) [arXiv:1609.04836] systematically showed large batches converge to sharp minima while small-batch SGD finds flat minima. Smith & Le (2018) [arXiv:1710.06451] provided a Bayesian explanation: the scale of SGD noise acts as an implicit bias, giving flat minima higher evidence weight. Together they answer: "where on the terrain is it best to stand?"
+
+**Symmetry and flat region structure.** Pittorino et al. (2022) [arXiv:2202.03038] — removing neuron permutation symmetry reveals that flat minima in function space lie close to one another. What look like "different minima" may be projections of the same function under different parameter coordinate systems.
+
+**Mean-field PDE.** Mei, Montanari & Nguyen (2018) [arXiv:1804.06561] — in the mean-field limit of two-layer networks, SGD dynamics are exactly described by a nonlinear PDE. This is the closest we have to a "population motion equation on the loss terrain."
+
+**Information plane.** Shwartz-Ziv & Tishby (2017) [arXiv:1703.00810] — training proceeds in two phases: fitting and compression. The trajectory of hidden representations in the information plane approaches the information bottleneck bound. This reframes learning dynamics from "loss decreasing" to "representation refining."

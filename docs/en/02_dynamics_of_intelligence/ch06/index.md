@@ -369,3 +369,19 @@ The next chapter—the first chapter of Volume III—will take us into the geome
 **From Lyapunov's flash of genius in 1892, to ResNet's residual connections in 2015, to GPT's autoregressive generation, to DEQ's fixed-point solution—across this 130-year span, one idea has remained unchanged.** Dynamical systems evolve in the direction of decreasing energy. If the energy decreases monotonically at every step and is bounded below, then the system must converge. Learning is like this, reasoning is like this, text generation is like this, belief updating is like this. Volume II (Walking and Belief) concludes here. Volume III (The Geometry of Reasoning) is about to begin—there, we will see how the chain of thought becomes the projection of the reasoning trajectory, and how attractors shape all of a model's reasoning behavior.
 
 :::
+
+## Further Reading and Related Work
+
+**Identity Mappings in Deep Residual Networks.** He et al. (2016) [arXiv:1603.05027] — Pre-activation residual units allow both forward and backward signals to pass directly through all layers — the crucial step from "residual as Euler method" to "residual as identity path," capturing the essence of ResNet from a dynamical systems perspective.
+
+**Reversible Architectures for Arbitrarily Deep Residual Neural Networks.** Chang et al. (2017) [arXiv:1709.03698] — Deriving reversible residual architectures from the ODE interpretation — if residual connections are Euler discretization, then reversible residuals are symplectic integrators where forward computation can be fully recovered during backpropagation without storing intermediate activations.
+
+**Deep Equilibrium Models.** Bai, Kolter & Koltun (2019) [arXiv:1909.01377] — The hidden-layer fixed point $h^* = f_\theta(h^*, x)$ as the output, replacing forward propagation with root-finding, achieving O(1) memory instead of O(L) — the most radical realization of the dynamical systems view: no explicit notion of depth, only "vector field + fixed-point solver."
+
+**Optimization Induced Equilibrium Networks.** Xie et al. (2021) [arXiv:2105.13228] — Decomposing each DNN layer as the proximal operator of an implicit convex function, the entire network's fixed point becomes the optimal solution of a convex optimization problem — bridging optimization and representation: non-convex DNNs correspond to explicit convex problems at their fixed points.
+
+**Scaling ResNets in the Large-depth Regime.** Marion et al. (2022) [arXiv:2206.06929] — As depth tends to infinity, non-trivial dynamics only exist under $\alpha_L = 1/\sqrt{L}$ scaling. This condition precisely marks the boundary between "feature learning" and "random initialization" — the very existence of dynamical behavior imposes requirements on network width.
+
+**Dynamics of Deep Neural Networks and Neural Tangent Hierarchy.** Huang & Yau (2019) [arXiv:1909.08156] — The Neural Tangent Hierarchy (NTH) is an infinite set of ODEs that collectively capture how the NTK evolves during training at finite width. The infinite-width limit (NNGP) is only the first-order approximation of NTH — dynamical systems require not a single trajectory, but a bundle of trajectories.
+
+**The Influence of Learning Rule on Representation Dynamics in Wide Neural Networks.** Bordelon & Pehlevan (2023) [arXiv:2210.02157] — The representation dynamics induced by different learning rules are all governed by their respective effective NTKs — choosing a learning rule amounts to choosing a different vector field, which determines the trajectory in representation space.

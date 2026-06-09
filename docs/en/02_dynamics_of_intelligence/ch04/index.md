@@ -223,3 +223,13 @@ In the next chapter, we will leave the Euclidean world and enter the non-Euclide
 **Walking is not merely descending along the gradient.** You can vary the rhythm of your stride (learning rate schedules), install guardrails along cliffs (regularization), and use the random sway of your footsteps to filter for steadier footing (implicit regularization). Once you have learned to walk, the next step is to learn to recognize the ground beneath your feet: Euclidean distance is not the only measure of distance. In belief space, the path from certainty to confusion and the path from confusion to certainty—these two roads have entirely different lengths. In the next chapter, we will enter the non-Euclidean world: Bregman Divergence and KL Divergence.
 
 :::
+
+## Further Reading and Related Work
+
+**Sharpness-Aware Minimization.** Foret et al. (2021) [arXiv:2010.01412] — SAM reformulates optimization from "find the lowest point" to "find the flattest low point": a min-max objective that simultaneously minimizes loss value and Hessian sharpness, searching for basins where the worst-case loss within radius $\rho$ remains low — the most direct demonstration that "the way of walking determines where you arrive."
+
+**Stochastic Gradient Descent as Approximate Bayesian Inference.** Mandt, Hoffman & Blei (2017) [arXiv:1704.04289] — Constant-learning-rate SGD traces a Markov chain whose stationary distribution approximates the Bayesian posterior. This connection reveals the probabilistic essence of SGD's implicit regularization: SGD is not "optimizing" but "sampling" — parameters end up in regions of high posterior probability, not at zero-loss points.
+
+**Implicit Regularization and Generalization in Overparameterized Neural Networks.** Johannsen (2026) [arXiv:2604.07603] — Small-batch SGD systematically drives the dynamics toward flatter minima: empirical measurements show Hessian maximum eigenvalue differences of up to 11.8x. This "noise-induced flatness preference" is SGD's most fundamental implicit regularization mechanism relative to full-batch gradient descent.
+
+**Convergence and Implicit Bias of Gradient Flow on Overparametrized Linear Networks.** Min et al. (2021) [arXiv:2105.06351] — The convergence rate of gradient flow is entirely determined by two geometric quantities: initialization imbalance and margin. The details of initialization — not the choice of optimizer — dictate "how fast" and "where to" the network moves.

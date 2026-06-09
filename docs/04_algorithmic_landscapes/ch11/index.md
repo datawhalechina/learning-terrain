@@ -157,3 +157,17 @@ LoRA 有效的原因指向了一个更深刻的几何事实：**任务适配的"
 **注意力弯曲了视野。LoRA 约束了身体。** 经典算法在平坦的欧几里得空间中运作——椭圆碗、数据云、Voronoi 图。深度架构弯曲了空间本身——相似度不再是固定的内积，而是被训练数据塑造的马氏度量。参数运动不再是自由的，而是被限制在低秩子空间中。你以为是你在设计架构——其实你只是在参数的几何中，发现那些自然存在的低维结构。全书的最后一章，扩散模型——噪声如何变成结构。从随机到有序，从熵增到熵减。那里，整本书的弧线将画上句点。
 
 :::
+
+## 延伸阅读与相关工作
+
+本章的核心几何操作有两个——注意力弯曲表示空间中的度量，LoRA 约束参数空间中的运动。以下工作从不同角度深化了这个几何图景。
+
+**Attention Is All You Need.** Vaswani et al. (2017) [arXiv:1706.03762]——Transformer 的原始论文。从本章的视角看，注意力不是在"计算权重"——它是在 token 关系空间中动态地弯曲度量。$Q$ 和 $K$ 的投影矩阵定义了一个数据依赖的马氏距离，使得"相似"不再由固定的内积决定，而是由任务本身塑造。
+
+**An Image is Worth 16x16 Words.** Dosovitskiy et al. (2021) [arXiv:2010.11929]——ViT：将图像分割为 patch 并将每个 patch 视为一个 token。注意力的几何不限于文本——任何可以嵌入度量空间的对象（图像 patch、图节点、蛋白质残基）都能被注意力的弯曲机制处理。这印证了本章的核心主张：注意力是一种通用的几何操作，而非特定的 NLP 架构。
+
+**Scaled-Dot-Product Attention as One-Sided Entropic Optimal Transport.** Litman (2025) [arXiv:2508.08369]——从信息几何的角度重新解释注意力机制。该文将 scaled dot-product attention 视为单侧熵最优传输。在这一图景中，LoRA 的低秩约束等价于只保留 Fisher 信息矩阵的前 $r$ 个主方向——微调时只更新信息量最大的几何方向。
+
+**RSAVQ: Riemannian Sensitivity-Aware Vector Quantization for Large Language Models.** Xu et al. (2025) [arXiv:2510.01240]——Fisher 信息矩阵诱导的 Riemannian 度量被用于指导量化。LoRA 和 RSAVQ 服从同一个几何原理：保留参数空间中敏感的方向（Fisher 信息大的方向），丢弃不敏感的方向。不同之处在于 LoRA 在微调时应用这一原理，RSAVQ 在量化时应用。
+
+**On Exact Computation with an Infinitely Wide Neural Net.** Arora et al. (2019) [arXiv:1904.11955]——卷积 NTK 的精确计算方法。在本章的几何框架下，注意力可以理解为"数据自适应的 NTK"——固定核变成动态核，根据输入内容逐 token 地调整相似度度量。LoRA 则揭示了这个动态核的变化仅发生在低秩子空间内。

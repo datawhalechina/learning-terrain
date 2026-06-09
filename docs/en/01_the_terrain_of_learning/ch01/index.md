@@ -281,3 +281,13 @@ In the next chapter, we will enter the most concrete page of this grammar: **Whe
 **In what space does learning occur? Is this space flat or curved? What counts as "near," and what counts as "far"?** — These questions will guide the entire book: from parameter space to representation space, from loss terrain to belief space, from fixed points to reasoning trajectories. If you pause at this chapter and take away only one question, let it be this one. Because until you can answer "where is the model?", "how does the model learn?" will forever remain an empty phrase.
 
 :::
+
+## Further Reading and Related Work
+
+Three landmark papers mark the shift from "stacking layers" to "continuous motion" across the terrain.
+
+**ResNet as dynamical system.** He et al. (2016) [arXiv:1512.03385] — the residual connection $h_{l+1} = h_l + f_\theta(h_l)$ recasts "layers" as explicit Euler steps. Depth is no longer how many layers you stack, but how many steps you take in discretizing a differential equation.
+
+**Neural ODE.** Chen et al. (2018) [arXiv:1806.07366] — if a residual block is an Euler step, why discretize at all? Continuous-depth models turn network "depth" into a continuous variable, offering direct technical validation of the thesis that "learning is continuous motion."
+
+**Neural Tangent Kernel.** Jacot, Gabriel & Hongler (2018) [arXiv:1806.07572] — in the infinite-width limit, gradient descent is equivalent to kernel regression under the NTK. The geometry of the training trajectory is governed by the kernel function, and generalization error is controlled by its eigenvalue spectrum. If you want an "analytical solution" for the equations of learning, NTK is the closest we have come.

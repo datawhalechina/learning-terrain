@@ -283,3 +283,15 @@ In the next chapter, we shall descend into the very ground beneath the body's fe
 **The body moves through parameter space; vision sharpens in representation space.** But why does the body walk in this direction rather than that direction? Because the terrain underfoot has a slope. In the next chapter, we shall focus on that terrain itself — the geometry of the loss function: how the gradient points the way, how the Euler step takes a stride, and how valleys, saddle points, and minima shape all the possibilities of learning. Where the body stands determines vision — but where the body can walk to is determined by the terrain.
 
 :::
+
+## Further Reading and Related Work
+
+Four lines of work that open up the geometry of "body" and "vision."
+
+**Topology of the loss landscape.** Freeman & Bruna (2017) [arXiv:1611.01540] — under over-parameterization, the loss landscape of single-layer ReLU networks is asymptotically connected. This is not a technical question about the existence of local minima; it is a topological fact about the global terrain of body motion: when parameters are plentiful, valleys merge into one connected basin.
+
+**Hessian spectrum.** Sagun et al. (2017) [arXiv:1706.04454] — the Hessian of over-parameterized networks exhibits a "bulk + outliers" structure: many near-zero eigenvalues (redundant parameter directions) plus a few large, data-driven eigenvalues. Most directions of the body are "free" — only those pointed to by the data are truly constrained.
+
+**Geometry of data manifolds.** Magai & Ayzenberg (2022) [arXiv:2204.08624] — using persistent homology to track topological changes in data manifolds across layers, quantitatively characterizing how "vision emerges from chaos to order."
+
+**Multi-chart latent spaces.** Schonsheck, Chen & Lai (2020) [arXiv:1912.10094] — representation space is not a single global map, but a patchwork of local coordinate charts. Intrinsic dimensionality determines the number of charts required and the lower bound on approximation error.

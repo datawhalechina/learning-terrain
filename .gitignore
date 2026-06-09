@@ -32,7 +32,7 @@ scripts/
 backup/
 .claude/
 *.log
-
+CLAUDE.md
 # Self-publishing copyright page (not part of open-source release)
 docs/copyright.md
 copyright_en.html

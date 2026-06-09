@@ -505,3 +505,17 @@ The next chapter will systematize the dynamical systems perspective: learning is
 **Euclidean is the crow's language — straight lines, symmetry, independent of terrain. Bregman is the language of water — flowing along energy gradients, asymmetric, the energy cost of each step dependent on the curvature underfoot.** KL divergence is the most important dialect in the language of water — it uses the topography of entropy to characterize all possible "flows" in belief space. The Yonglin Limit proves: as long as you follow the steepest descent direction on the KL landscape, the water will inevitably flow to the sea. In the next chapter, we will systematize the dynamical systems perspective — from "learning is motion" in Chapter 1, to the discrete Euler steps of Chapter 3, to the final unification of Chapter 7: ResNet, GPT autoregression, and DEQ are all faces of the same dynamical system in different spaces.
 
 :::
+
+## Further Reading and Related Work
+
+**Relative Natural Gradient for Learning Large Complex Models.** Sun & Nielsen (2016) [arXiv:1606.06069] — Extracts local relative Fisher information measures from large neuronal systems, making natural gradient tractable in modular networks — not an approximation, but a rigorous characterization of the "locality" of information geometry.
+
+**On the Locality of the Natural Gradient for Deep Learning.** Ay (2020) [arXiv:2005.10791] — The Fisher information matrix is fundamentally a local geometric quantity: it depends only on the second-order behavior of KL divergence near the current parameters. This seemingly trivial observation is the root reason natural gradients are computable in deep networks — and the most essential dividing line between Bregman divergences and Euclidean step sizes.
+
+**Natural Gradient Methods: Perspectives, Efficient-Scalable Approximations, and Analysis.** Shrestha (2023) [arXiv:2303.05473] — A systematic survey comparing strategies for replacing the Hessian with the Fisher information matrix, from Kronecker factorization to low-rank approximations, spanning theoretical frameworks to engineering implementations.
+
+**Generalized Euler Logarithm and its Applications in Machine Learning.** Cichocki (2025) [arXiv:2502.17500] — A two-parameter unification of the Bregman divergence family: the generalized Euler logarithm $E_{\alpha,\beta}(x)$ controls tail robustness and local gradient shaping separately, subsuming KL divergence, $\chi^2$ divergence, and $\alpha$-divergence under a single parametrized framework — a parameterization of the Bregman generator itself.
+
+**Scaled-Dot-Product Attention as One-Sided Entropic Optimal Transport.** Litman (2025) [arXiv:2508.08369] — The forward pass of attention is the exact solution to a degenerate entropic optimal transport problem — each step of Transformer self-attention solves an entropy-regularized transport problem, with the Fisher information matrix defining the geometric curvature of the attention distribution.
+
+**Diagonalizing the Softmax.** Garrod, Keating & Thrampoulidis (2025) [arXiv:2512.04006] — Hadamard initialization diagonalizes the softmax Fisher information matrix, and cross-entropy gradient flow provably converges to Neural Collapse geometry — the first rigorous result where information geometry directly explains deep learning training dynamics.

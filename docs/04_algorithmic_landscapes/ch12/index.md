@@ -157,3 +157,21 @@ ch10 回到经典算法：线性回归、PCA、SVM——用几何重新看一切
 **—— 李籽溪（兔狲教授），2026 年，中山大学**
 
 :::
+
+## 延伸阅读与相关工作
+
+本章是全书终点。从牛顿 1687 年到扩散模型 2020 年，337 年的科学思想被一条几何之线串在一起。以下工作不是孤立的论文——它们是这条弧线上的关键站点。
+
+**Denoising Diffusion Probabilistic Models.** Ho, Jain & Abbeel (2020) [arXiv:2006.11239]——DDPM 原始论文，受非平衡热力学启发，将扩散模型带入主流。它将前向过程设计为固定噪声调度，使逆过程可以通过简单的 MSE 损失训练。本章的几何解读：前向是熵增，逆扩散是熵减——噪声到结构，是动力系统沿得分场的流动。
+
+**Score-Based Generative Modeling through Stochastic Differential Equations.** Song et al. (2021) [arXiv:2011.13456]——用 SDE 将扩散模型和 score-based 模型统一在一个框架中。probability flow ODE 的出现意味着：逆扩散不仅是随机过程，也是一个确定性动力系统——等价于 Neural ODE（见下文）。这个工作将扩散和本书 ch6 的动力系统语言完全统一。
+
+**Improved Denoising Diffusion Probabilistic Models.** Nichol & Dhariwal (2021) [arXiv:2102.09672]——学习逆过程的方差，使采样步数从 1000 降至约 100。几何解释：更光滑的概率流 ODE 轨迹允许更大的积分步长——这是 ch4 中自适应步长思想在数据空间中的复现。
+
+**A Sharp Convergence Theory for The Probability Flow ODEs of Diffusion Models.** Li et al. (2024) [arXiv:2408.02320]——概率流 ODE 的 $d/\varepsilon$ 收敛理论：在数据维度 $d$ 和目标误差 $\varepsilon$ 下，ODE 轨迹的逼近需要 $O(d/\varepsilon)$ 步。这是扩散模型的"永霖极限"——与 ch5 中 KL 散度的收敛保证、ch7 中思维链的步数下界，共享完全相同的数学结构：**收敛需要步数，步数由地形的几何决定。**
+
+**Neural Ordinary Differential Equations.** Chen et al. (2018) [arXiv:1806.07366]——Neural ODE 将残差网络的离散层推向连续深度。probability flow ODE 是 Neural ODE 在扩散模型中的特例——逆过程是一个从噪声到数据的连续时间动力系统。全书从牛顿力学（ch1）到动力系统（ch6）到扩散模型（ch12），环线在此闭合。
+
+**Language Models are Few-Shot Learners.** Brown et al. (2020) [arXiv:2005.14165]——GPT-3，175B 参数的自回归语言模型。在本章的几何框架中，自回归生成是隐状态在信念空间中沿推理场的一步移动——每一步生成一个 token，等价于扩散模型逆过程中的一步去噪。扩散模型是连续空间中的生成，自回归模型是离散空间中的生成。两者是同一枚硬币的两面。
+
+**Scaling Laws for Neural Language Models.** Kaplan et al. (2020) [arXiv:2001.08361]——缩放定律揭示了模型容量与性能之间的幂律关系。在全书的统一几何语言中：更大模型 = 更光滑的能量地形 = 更短的推理路径 = 更深的盆地 = 更好的泛化。缩放定律不是关于参数量——它是关于地形的光滑性和盆地深度。

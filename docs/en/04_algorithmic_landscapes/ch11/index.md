@@ -157,3 +157,17 @@ The next chapter—the final chapter of the book—will bring us to diffusion mo
 **Attention bends the field of vision. LoRA constrains the body.** Classical algorithms operate in flat Euclidean space—elliptical bowls, data clouds, Voronoi diagrams. Deep architectures bend space itself—similarity is no longer a fixed inner product, but a Mahalanobis metric shaped by training data. Parameter motion is no longer free, but confined to low-rank subspaces. You thought you were designing the architecture—in truth, you are only discovering, within the geometry of parameters, those naturally existing low-dimensional structures. The final chapter of the book: diffusion models—how noise becomes structure. From randomness to order, from entropy increase to entropy decrease. There, the arc of the entire book will come to its close.
 
 :::
+
+## Further Reading and Related Work
+
+The two core geometric operations of this chapter—attention bending the metric in representation space and LoRA constraining motion in parameter space—are deepened by the following works from different angles.
+
+**Attention Is All You Need.** Vaswani et al. (2017) [arXiv:1706.03762]——The original Transformer paper. From this chapter's perspective, attention is not "computing weights"—it is dynamically bending the metric in token relation space. The projection matrices of $Q$ and $K$ define a data-dependent Mahalanobis distance, so that "similarity" is no longer determined by a fixed inner product but shaped by the task itself.
+
+**An Image is Worth 16x16 Words.** Dosovitskiy et al. (2021) [arXiv:2010.11929]——ViT: dividing an image into patches and treating each patch as a token. The geometry of attention is not limited to text—any object that can be embedded into a metric space (image patches, graph nodes, protein residues) can be processed by attention's bending mechanism. This confirms the chapter's core claim: attention is a general geometric operation, not a specific NLP architecture.
+
+**Scaled-Dot-Product Attention as One-Sided Entropic Optimal Transport.** Litman (2025) [arXiv:2508.08369]——Reinterpreting the attention mechanism from an information-geometric perspective. This paper treats scaled dot-product attention as one-sided entropic optimal transport. In this picture, LoRA's low-rank constraint is equivalent to retaining only the top $r$ principal directions of the Fisher information matrix—fine-tuning only updates the geometrically most informative directions.
+
+**RSAVQ: Riemannian Sensitivity-Aware Vector Quantization for Large Language Models.** Xu et al. (2025) [arXiv:2510.01240]——The Riemannian metric induced by the Fisher information matrix is used to guide quantization. LoRA and RSAVQ operate under the same geometric principle: preserve sensitive directions in parameter space (those with large Fisher information), discard insensitive ones. The difference is that LoRA applies this principle during fine-tuning, while RSAVQ applies it during quantization.
+
+**On Exact Computation with an Infinitely Wide Neural Net.** Arora et al. (2019) [arXiv:1904.11955]——An exact computation method for the convolutional NTK. Within this chapter's geometric framework, attention can be understood as a "data-adaptive NTK"—a fixed kernel becomes a dynamic kernel, adjusting the similarity metric token by token according to input content. LoRA then reveals that the changes in this dynamic kernel only occur within a low-rank subspace.
