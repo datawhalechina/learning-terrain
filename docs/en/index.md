@@ -41,11 +41,11 @@ import { VPTeamMembers } from 'vitepress/theme'
 
 const members = [
   {
-    avatar: 'https://www.github.com/lizixi-0x2F.png',
+    avatar: 'https://www.github.com/datawhalechina.png',
     name: 'Li Zixi (Mr. Pallas\'s Cat)',
     title: 'Author',
     links: [
-      { icon: 'github', link: 'https://github.com/lizixi-0x2F' },
+      { icon: 'github', link: 'https://github.com/datawhalechina' },
     ]
   },
 ]
