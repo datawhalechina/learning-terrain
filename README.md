@@ -9,6 +9,13 @@
 
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![VitePress](https://img.shields.io/badge/built%20with-VitePress-646cff?style=flat-square)](https://vitepress.dev/)
+[![Discussions](https://img.shields.io/badge/join-Discussions-6c5ce7?style=flat-square)](https://github.com/datawhalechina/learning-terrain/discussions)
+
+</div>
+
+<div align="center">
+
+**🌐 [English](README_EN.md) | [在线阅读](https://datawhalechina.github.io/learning-terrain/) | [💬 读者交流](https://github.com/datawhalechina/learning-terrain/discussions/2)**
 
 </div>
 
