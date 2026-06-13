@@ -105,6 +105,7 @@ export default defineConfig({
                 { text: 'ch10 经典算法的几何', link: '/04_algorithmic_landscapes/ch10' },
                 { text: 'ch11 深度架构的几何', link: '/04_algorithmic_landscapes/ch11' },
                 { text: 'ch12 扩散与收敛', link: '/04_algorithmic_landscapes/ch12' },
+                { text: '尾声：看见', link: '/epilogue' },
               ]
             }
           ],
@@ -115,6 +116,7 @@ export default defineConfig({
                 { text: '卷二：行走与信念 →', link: '/02_dynamics_of_intelligence/ch04' },
                 { text: '卷三：推理的几何 →', link: '/03_geometry_of_reasoning/ch07' },
                 { text: '卷四：算法的地貌学 →', link: '/04_algorithmic_landscapes/ch10' },
+                { text: '尾声：看见', link: '/epilogue' },
               ]
             }
           ]
@@ -197,6 +199,7 @@ export default defineConfig({
                 { text: 'ch10 Geometry of Classical Algorithms', link: '/en/04_algorithmic_landscapes/ch10' },
                 { text: 'ch11 Geometry of Deep Architectures', link: '/en/04_algorithmic_landscapes/ch11' },
                 { text: 'ch12 Diffusion and Convergence', link: '/en/04_algorithmic_landscapes/ch12' },
+                { text: 'Epilogue: Seeing', link: '/en/epilogue' },
               ]
             }
           ],
@@ -207,6 +210,7 @@ export default defineConfig({
                 { text: 'Vol.II: Walking and Belief →', link: '/en/02_dynamics_of_intelligence/ch04' },
                 { text: 'Vol.III: The Geometry of Reasoning →', link: '/en/03_geometry_of_reasoning/ch07' },
                 { text: 'Vol.IV: Algorithmic Landscapes →', link: '/en/04_algorithmic_landscapes/ch10' },
+                { text: 'Epilogue: Seeing', link: '/en/epilogue' },
               ]
             }
           ]
