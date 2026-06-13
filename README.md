@@ -39,6 +39,7 @@
 
 | 章节 | 核心问题 | 状态 |
 | :--- | :--- | :---: |
+| [卷引言：参数空间是身体 → 损失地形是坡度 → 梯度下降是行走 → 表示空间是视野](https://datawhalechina.github.io/learning-terrain/01_the_terrain_of_learning/) | 盲人被空降到荒野——卷一的三章建立全书最核心的逻辑链 | ✅ |
 | [第1章：为什么学习需要几何](https://datawhalechina.github.io/learning-terrain/01_the_terrain_of_learning/ch01) | 从 $F=ma$ 到 $H=T+V$：为什么力的逐项分析不够，必须走向能量地形 | ✅ |
 | [第2章：身体与视野：参数空间与表示空间](https://datawhalechina.github.io/learning-terrain/01_the_terrain_of_learning/ch02) | 参数空间是模型的身体，表示空间是模型的视野 | ✅ |
 | [第3章：损失地形与梯度运动](https://datawhalechina.github.io/learning-terrain/01_the_terrain_of_learning/ch03) | 损失函数在参数空间上画出一片地形，梯度下降是沿坡而下的运动 | ✅ |
@@ -47,6 +48,7 @@
 
 | 章节 | 核心问题 | 状态 |
 | :--- | :--- | :---: |
+| [卷引言：你脚下的空间不是平的](https://datawhalechina.github.io/learning-terrain/02_dynamics_of_intelligence/) | 空间弯曲有严格的形式化——从信息几何到动力系统到不动点 | ✅ |
 | [第4章：行走的方式：优化器与正则化](https://datawhalechina.github.io/learning-terrain/02_dynamics_of_intelligence/ch04) | SGD、动量、Adam——你是大步流星，还是碎步谨慎？ | ✅ |
 | [第5章：非欧世界：Bregman 散度与 KL 散度](https://datawhalechina.github.io/learning-terrain/02_dynamics_of_intelligence/ch05) | 信念空间不是平直的——Bregman 散度是熵地形上的能量差 | ✅ |
 | [第6章：动力系统与不动点：从李雅普诺夫到 DEQ](https://datawhalechina.github.io/learning-terrain/02_dynamics_of_intelligence/ch06) | 学习是动力系统的演化。不动点、吸引子、稳定性——永霖极限 | ✅ |
@@ -55,6 +57,7 @@
 
 | 章节 | 核心问题 | 状态 |
 | :--- | :--- | :---: |
+| [卷引言：推理是隐藏状态沿推理场的流动](https://datawhalechina.github.io/learning-terrain/03_geometry_of_reasoning/) | 不要看 token。看轨迹。看场。看不动点。推理不是行为——推理是几何 | ✅ |
 | [第7章：思维链：推理轨迹的投影](https://datawhalechina.github.io/learning-terrain/03_geometry_of_reasoning/ch07) | 你看到的 token 只是影子——真正的推理发生在隐藏状态空间 | ✅ |
 | [第8章：推理场：吸引子与验证器](https://datawhalechina.github.io/learning-terrain/03_geometry_of_reasoning/ch08) | 推理场的结构。正确答案有宽阔的盆地，错误答案是训练数据刻出的沟壑 | ✅ |
 | [第9章：长推理与地貌重塑](https://datawhalechina.github.io/learning-terrain/03_geometry_of_reasoning/ch09) | 推理步数由地形决定——不是模型"不够聪明"，是山脊太崎岖 | ✅ |
@@ -63,6 +66,7 @@
 
 | 章节 | 核心问题 | 状态 |
 | :--- | :--- | :---: |
+| [卷引言：你学过的每一个公式，都是一片地形的等高线](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/) | 卷四不是"应用"。卷四是回家——用几何语言重新看见每一个经典算法 | ✅ |
 | [第10章：经典算法的几何](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/ch10) | 线性回归、PCA、SVM——经典算法在几何语言中从未如此清晰 | ✅ |
 | [第11章：深度架构的几何](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/ch11) | Attention、LoRA、Transformer——深度架构的地貌学解读 | ✅ |
 | [第12章：扩散与收敛](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/ch12) | 扩散模型的几何：前向是熵增，逆向是沿得分场流动——全书收束 | ✅ |
