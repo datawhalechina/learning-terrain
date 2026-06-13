@@ -68,6 +68,7 @@ export default defineConfig({
             {
               text: '卷一：学习的地形',
               items: [
+                { text: '卷引言', link: '/01_the_terrain_of_learning/' },
                 { text: 'ch1 为什么学习需要几何', link: '/01_the_terrain_of_learning/ch01' },
                 { text: 'ch2 身体与视野：参数空间与表示空间', link: '/01_the_terrain_of_learning/ch02' },
                 { text: 'ch3 损失地形与梯度运动', link: '/01_the_terrain_of_learning/ch03' },
@@ -78,6 +79,7 @@ export default defineConfig({
             {
               text: '卷二：行走与信念',
               items: [
+                { text: '卷引言', link: '/02_dynamics_of_intelligence/' },
                 { text: 'ch4 行走的方式：优化器与正则化', link: '/02_dynamics_of_intelligence/ch04' },
                 { text: 'ch5 非欧距离：Bregman与KL', link: '/02_dynamics_of_intelligence/ch05' },
                 { text: 'ch6 不动点：从ResNet到GPT到DEQ', link: '/02_dynamics_of_intelligence/ch06' },
@@ -88,6 +90,7 @@ export default defineConfig({
             {
               text: '卷三：推理的几何',
               items: [
+                { text: '卷引言', link: '/03_geometry_of_reasoning/' },
                 { text: 'ch7 思维链：推理轨迹的投影', link: '/03_geometry_of_reasoning/ch07' },
                 { text: 'ch8 推理场：吸引子与验证器', link: '/03_geometry_of_reasoning/ch08' },
                 { text: 'ch9 长推理与地貌重塑', link: '/03_geometry_of_reasoning/ch09' },
@@ -98,6 +101,7 @@ export default defineConfig({
             {
               text: '卷四：算法的地貌学',
               items: [
+                { text: '卷引言', link: '/04_algorithmic_landscapes/' },
                 { text: 'ch10 经典算法的几何', link: '/04_algorithmic_landscapes/ch10' },
                 { text: 'ch11 深度架构的几何', link: '/04_algorithmic_landscapes/ch11' },
                 { text: 'ch12 扩散与收敛', link: '/04_algorithmic_landscapes/ch12' },
@@ -156,6 +160,7 @@ export default defineConfig({
             {
               text: 'Vol.I: The Terrain of Learning',
               items: [
+                { text: 'Volume Introduction', link: '/en/01_the_terrain_of_learning/' },
                 { text: 'ch1 Why Learning Needs Geometry', link: '/en/01_the_terrain_of_learning/ch01' },
                 { text: 'ch2 Body and Vision: Parameter Space and Representation Space', link: '/en/01_the_terrain_of_learning/ch02' },
                 { text: 'ch3 Loss Terrain and Gradient Motion', link: '/en/01_the_terrain_of_learning/ch03' },
@@ -166,6 +171,7 @@ export default defineConfig({
             {
               text: 'Vol.II: Walking and Belief',
               items: [
+                { text: 'Volume Introduction', link: '/en/02_dynamics_of_intelligence/' },
                 { text: 'ch4 Ways of Walking: Optimizers and Regularization', link: '/en/02_dynamics_of_intelligence/ch04' },
                 { text: 'ch5 The Non-Euclidean World: Bregman and KL', link: '/en/02_dynamics_of_intelligence/ch05' },
                 { text: 'ch6 Fixed Points: From ResNet to GPT to DEQ', link: '/en/02_dynamics_of_intelligence/ch06' },
@@ -176,6 +182,7 @@ export default defineConfig({
             {
               text: 'Vol.III: The Geometry of Reasoning',
               items: [
+                { text: 'Volume Introduction', link: '/en/03_geometry_of_reasoning/' },
                 { text: 'ch7 Chain of Thought: Projection of the Reasoning Trajectory', link: '/en/03_geometry_of_reasoning/ch07' },
                 { text: 'ch8 Reasoning Fields: Attractors and Verifiers', link: '/en/03_geometry_of_reasoning/ch08' },
                 { text: 'ch9 Long Reasoning and Landscape Reshaping', link: '/en/03_geometry_of_reasoning/ch09' },
@@ -186,6 +193,7 @@ export default defineConfig({
             {
               text: 'Vol.IV: Algorithmic Landscapes',
               items: [
+                { text: 'Volume Introduction', link: '/en/04_algorithmic_landscapes/' },
                 { text: 'ch10 Geometry of Classical Algorithms', link: '/en/04_algorithmic_landscapes/ch10' },
                 { text: 'ch11 Geometry of Deep Architectures', link: '/en/04_algorithmic_landscapes/ch11' },
                 { text: 'ch12 Diffusion and Convergence', link: '/en/04_algorithmic_landscapes/ch12' },

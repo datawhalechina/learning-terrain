@@ -94,6 +94,31 @@ $$x_{t-1} = x_t - \eta F_t(x_t) + \sqrt{\eta}\,\xi_t$$
 
 Each step is one time step of the dynamical system in ch6. The noise term $\sqrt{\eta}\,\xi_t$ provides randomness—preventing trajectories from collapsing to a single mode on the data manifold, ensuring generative diversity. This is exactly parallel to the logic in ch9, where temperature injection helps reasoning escape false attractors.
 
+:::info
+
+**Diffusion Models and Optimal Transport: The Schrödinger Bridge**
+
+The forward process (data → noise) and reverse process (noise → data) of diffusion models form a pair of mutually time-reversed stochastic differential equations. From the perspective of probability distributions, this pair of SDEs solves a classic problem: **given two probability distributions—the data distribution $p_0$ and the Gaussian distribution $p_T = \mathcal{N}(0, I)$—what is the "most natural" stochastic process evolving from $p_0$ to $p_T$?**
+
+In 1931, Erwin Schrödinger (yes, the Schrödinger of the cat) posed a seemingly unrelated question: in an ensemble of Brownian particles, if the distribution of particles is observed to be $\mu_0$ at time $t=0$ and $\mu_T$ at time $t=T$, what is the most likely evolution of the particle ensemble between these two moments? This problem is called the **Schrödinger Bridge problem.**
+
+The answer is an entropy-regularized optimal transport problem. In the continuous-time limit, the Schrödinger Bridge is equivalent to solving a coupled system of forward and backward SDEs—the forward SDE pushes $\mu_0$ toward $\mu_T$, and the backward SDE pulls $\mu_T$ back toward $\mu_0$. This is precisely the mathematical structure of diffusion models: the score function $\nabla_x \log p_t(x)$ is the drift term of the backward SDE—i.e., the "optimal control" of the Schrödinger Bridge.
+
+The connection to Optimal Transport completes the picture. Classical optimal transport (the Monge-Kantorovich problem) seeks the minimum-cost scheme for mapping one distribution $P$ to another $Q$—cost typically measured by the Wasserstein distance. The Schrödinger Bridge is **entropy-regularized** optimal transport: it allows particles not to move strictly along deterministic paths, but to explore multiple possible paths with the aid of noise. The strength of entropy regularization is controlled by the diffusion coefficient—the larger the noise, the "fuzzier" the paths.
+
+As the noise tends to zero, the Schrödinger Bridge degenerates to the classical optimal transport map—all probability mass moves along the unique optimal path. This is precisely the "deterministic sampling" limit of diffusion models (e.g., DDIM): after removing the random noise term, the reverse diffusion becomes a deterministic probability flow ODE, each trajectory being a uniquely defined path from Gaussian noise to some point on the data manifold.
+
+This provides a profound unifying perspective for the entire book:
+
+- **In belief space**, Bregman divergence and KL divergence measure the "information distance" between belief distributions, and the Yonglin Limit guarantees that contraction mappings along the KL gradient necessarily converge—this is the **language of information geometry.**
+- **In data space**, the Wasserstein distance and the Schrödinger Bridge measure the "geometric distance" between data distributions, and the reverse process of diffusion models guarantees convergence from a noise distribution to the data manifold—this is the **language of optimal transport.**
+
+The two are mathematically dual. Bregman divergence is the "energy difference" on the probability simplex—it measures the irreversible loss of **information.** The Wasserstein distance is the "transport cost" in data space—it measures the cost of moving **mass.** And the Schrödinger Bridge sits precisely at the intersection of the two: it simultaneously moves probability mass through data space while preserving entropy regularization in the information-theoretic sense.
+
+From the Yonglin Limit of ch5 to the diffusion models of ch12—the two great mathematical pillars of this book (Bregman geometry and optimal transport) shake hands on the Schrödinger Bridge.
+
+:::
+
 ## 12.6 Generation: Trajectories Converge to the Data Manifold
 
 View the entire reverse diffusion trajectory $\{x_T, x_{T-1}, \ldots, x_0\}$ as one evolution of a dynamical system. It starts from pure noise—maximum entropy, zero structure—and flows step by step along the vector field defined by the score function toward the data manifold.

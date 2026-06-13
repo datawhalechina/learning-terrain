@@ -62,6 +62,26 @@ But not all fixed points are "good." Some are valleys—once you arrive, you can
 
 :::info
 
+**Bregman Stability: Why Euclidean Classification Falls Short on the High-Dimensional Simplex**
+
+Definition 4 classifies fixed points using the eigenvalues of the Jacobian $J(p^*) = \nabla_p F_x(p^*)$. But $\nabla_p$ is the **Euclidean gradient**—it assumes the probability simplex is a flat space, with every coordinate direction treated equally.
+
+The entire content of ch5 says otherwise: the probability simplex is not flat. Near the edges of the simplex (where some $p_i \approx 0$), the same Euclidean step size corresponds to an enormous change in KL divergence. Near the center, the same Euclidean step size hardly changes KL divergence at all. Analyzing the local stability of $F_x$ with the Euclidean gradient is like measuring distances on a sphere with a straight ruler—it may approximately hold locally, but the error accumulates rapidly as you move away from the fixed point.
+
+A more geometrically consistent approach is to use **Bregman linearization**: expand $F_x$ near $p^*$ using KL geometry (rather than Euclidean geometry). Specifically, precondition the gradient with the Fisher information matrix $G(p^*)$:
+
+$$J_{\text{Bregman}}(p^*) = G(p^*)^{-1/2} \cdot J(p^*) \cdot G(p^*)^{-1/2}$$
+
+The eigenvalues of $J_{\text{Bregman}}$ generally differ from those of $J$—the discrepancy between the two precisely measures the impact of the local curvature of the probability simplex at $p^*$ on the stability classification.
+
+When $G(p^*) \approx I$ (near the center of the simplex, close to a uniform distribution), the two are approximately equal—the Euclidean classification suffices. When $G(p^*)$ is highly anisotropic (near the edges of the simplex, where some $p_i \to 0$), the spectrum of $J_{\text{Bregman}}$ may differ significantly from that of $J$. Specifically, $G(p^*)^{-1/2}$ amplifies eigenvalues in directions where $p_i$ is small (because Fisher information diverges at the edges—$1/p_i \to \infty$, its inverse tends to zero, thereby "straightening out" directions that were squashed flat by curvature). This means: **near simplex edges, Euclidean analysis may misclassify a stable attractor as unstable (or an unstable saddle as an attractor), because it fails to account for the local curvature of probability space.**
+
+This observation directly connects $\eta_{\max}(p)$ from ch5 (the Bregman constraint on step size) with the stability classification of ch8: both stem from the same geometric fact—**on the probability simplex, the correct basis for local linearization is not the identity matrix, but the Fisher information matrix.**
+
+:::
+
+:::info
+
 **Pallas's Cat Professor: Why Wrong Answers Are Also "Right"**
 
 There is a subtlety here that is easy to overlook. An attractor has no attribute of "correct" or "incorrect"—it is simply a fixed point of a vector field. Correct and incorrect are labels we humans attach after the fact.
@@ -76,6 +96,10 @@ This is why the model confidently makes mistakes. It is not "guessing wrong"—i
 ![Three attractor basins](/figures/ch08_attractor_basins_tikz.svg)
 
 *Three attractor basins: correct answer (deepest), plausible wrong answer, and common mistake. The reasoning field determines which basin captures the trajectory.*
+
+![Reasoning field simplex: vector field, attractors, and trajectories](/figures/ch08_reasoning_field_simplex_tikz.svg)
+
+*The complete reasoning field $F_x$ on the probability simplex $\Delta^2$. Blue basin: correct attractor $p^*_1$ — wide, convergent from distant directions. Red basins: error attractors $p^*_2$ (plausible error) and $p^*_3$ (narrow crevice) — shallow and narrow, capturing only trajectories that approach from specific directions. Black dots are saddle points — they partition the basins of different attractors (separatrices). Green trajectory: starting from uniform initial belief $p_0$, crosses the saddle and successfully falls into the correct basin. Orange trajectories: starting from different initial positions, captured by error basins — within their respective basins, all arrows point to the center; the reasoning is mathematically equally "correct."*
 
 These classifications answer "why does the model produce wrong answers"—but another question is more fundamental: **where do incorrect attractors come from?** They are not random—they are pits carved into the energy landscape by the statistical structure of the training data.
 
@@ -100,6 +124,10 @@ $$F_x^{\text{ver}}(p) = F_x(p) + \eta_v \nabla_p V(p, x)$$
 **Geometric effect**: At an incorrect attractor $p_{\text{wrong}}$, the original field $F_x(p_{\text{wrong}}) = 0$ (it is a fixed point). The verifier knows that $p_{\text{wrong}}$ is wrong—$V(p_{\text{wrong}}, x)$ is low, and its gradient $\nabla_p V$ points away from $p_{\text{wrong}}$. After superposition, $F_x^{\text{ver}}(p_{\text{wrong}}) \neq 0$—the original fixed point is eliminated. The incorrect basin is filled in.
 
 **Theorem 2 (Sufficient Condition for Verifier to Eliminate an Incorrect Attractor)**. If the verifier satisfies $\|\eta_v \nabla_p V(p_{\text{wrong}}, x)\| > \max_{\lambda \in \sigma(J)} |\text{Re}(\lambda)| \cdot \text{diam}(\mathcal{B})$, then $p_{\text{wrong}}$ is no longer a fixed point in $F_x^{\text{ver}}$.
+
+![Verifier eliminating a wrong attractor: before and after repulsive field superposition](/figures/ch08_verifier_elimination_tikz.svg)
+
+*Geometric mechanism of verifier-based attractor elimination. Left: original reasoning field $F_x$ — correct attractor $p^*$ (blue basin, deep and wide) and wrong attractor $p_{\text{wrong}}$ (red basin, shallow and narrow) coexist, with a saddle (black dot) separating their basins of attraction. The green trajectory from $p_0$ successfully converges to $p^*$, but other initial beliefs may slide into the wrong basin. Right: modified field $F_x^{\text{ver}}$ after superposing the verifier gradient $\eta_v \nabla_p V$ — purple dotted arrows show the repulsive force exerted by the verifier around $p_{\text{wrong}}$. The wrong basin is filled in (red cross), and the vector field now points entirely toward $p^*$. Even trajectories starting near the former wrong basin are pulled back toward the correct attractor.*
 
 A verifier superimposes a repulsive field at individual reasoning steps. But the verifier requires an external evaluation signal (whether the answer is correct). In many tasks—writing, translation, dialogue—there is no objective "correct answer." In these cases, we need a more fundamental way to reshape the terrain.
 
@@ -154,6 +182,31 @@ Verifiers superimpose repulsive fields around incorrect attractors—filling in 
 
 ## Unresolved Questions
 
+1. The reasoning field $F_x$ (Definition 1) contains $\mathbb{E}_{y \sim p_\theta(\cdot|p,x)}[\nabla_p \log p_\theta(y|p,x)]$—an expectation over the model's own output distribution. This means $F_x$ depends on the model's **current** parameters $\theta$. During a single reasoning episode, $\theta$ is fixed—but across different training stages, different $\theta$ produce different $F_x$. **Does the evolution of $F_x$ during training follow a discernible pattern?** Can we "snapshot" $F_x$ at any moment during training and predict the fixed-point structure of $F_x$ at the end of training?
+
+2. Definition 4 classifies fixed points by the sign of the real parts of the eigenvalues of the Jacobian $J(p^*) = \nabla_p F_x(p^*)$. But $J(p^*)$ is a $(K-1) \times (K-1)$ matrix ($K$ is the number of classes), while in real language models the "answer space" is typically the entire vocabulary ($|V| \approx 50000$). On this high-dimensional simplex, **does the eigenvalue spectrum of the Jacobian have a universal structure**—for example, many near-zero eigenvalues (flat directions) plus a few large eigenvalues determining stability (analogous to the "bulk + outliers" spectrum of the Hessian)?
+
+3. Theorem 1 asserts: systematic errors in the training data with sufficiently high frequency create local minima in $E(p)$, hence attractors in $F_x$. But what is the threshold for "sufficiently high frequency"? Does this threshold depend on the semantic distance between the error pattern and the correct pattern—i.e., **can an error basin form when the statistical frequency is low but the error is geometrically "insulated" from the correct belief?**
+
+4. Definition 6 models the verifier as superposing $\eta_v \nabla_p V(p, x)$ onto $F_x$. But the verifier gradient $\nabla_p V$ is defined in the Euclidean sense—not under the Bregman geometry of the simplex. If we instead used the Bregman gradient (replacing $\nabla_p V$ with $G(p)^{-1}\nabla_p V$, where $G(p)$ is the Fisher information matrix), would the repulsive effect of the verifier be more precise—since it respects the local curvature of probability space?
+
+5. Theorem 3 (RLHF fixed-point redistribution) has a profound limitation: **the set of fixed points is invariant under RLHF.** But is this strictly true? If the reward model $R(p, x)$ creates an extremely deep "energy valley" near a point that was not a fixed point in the pretrained model, can this valley **spontaneously** become a new fixed point through gradient descent—even if it was not in the original $F_x^{-1}(0)$?
+
+6. The three geometric diagnostic indicators—basin coverage, basin separation, field uniformity—are currently defined only conceptually. On real language models ($|V| \approx 50000$, where exhaustive traversal of the simplex is impossible), **how can we effectively estimate these indicators?** Can we find proxy variables in the spectrum of attention matrices or the local covariance structure of hidden states?
+
+7. The inequality in Theorem 2 (sufficient condition for verifier elimination of a wrong attractor) depends on $\max_{\lambda \in \sigma(J)} |\text{Re}(\lambda)| \cdot \text{diam}(\mathcal{B})$—the diameter of the error basin multiplied by its maximum eigenvalue. In real models, $\text{diam}(\mathcal{B})$ cannot be directly observed (you can only estimate basin boundaries by sampling trajectories). **Is there a more easily computable elimination condition that depends only on local information at $p_{\text{wrong}}$ (the Jacobian and Hessian)?**
+
+8. The reasoning field $F_x$ is a function of the problem $x$. Across different problems, **do reasoning fields have systematic geometric relationships?** For example, if problems $x_1$ and $x_2$ are close in semantic space ("What is the capital of France?" and "Which country is Paris in?"), are their reasoning fields also close to each other—do the fixed-point positions and basin structures of $F_{x_1}$ and $F_{x_2}$ relate in some predictable way?
+
+9. The Pallas's Cat Professor notes in the :::info: "A wrong belief is geometrically correct—inside a wrong basin, all arrows point toward the basin center." This means **the model's confident errors are not malfunctions—they are normal behavior of the dynamical system.** Is "confidence" itself—the sharpness of the softmax peak at $p^*$—proportional to the determinant of the Hessian at that fixed point? If so, can we predict the model's "confidence level" purely from local curvature, before the model even outputs an answer?
+
+10. This chapter unifies verifiers and RLHF under the framework $F_x^{\text{modified}} = F_x + \text{correction term}$. But the **dynamical effects of these two corrections differ**: the verifier applies a repulsive force at every reasoning step (online correction), while RLHF permanently alters the terrain during training (offline correction). Under what conditions is online correction mathematically equivalent to the limit of some offline correction—just as the discrete trajectory of the Euler method approaches continuous gradient flow as $\eta \to 0$?
+
+11. If the reasoning field $F_x$ truly exists and can be numerically characterized to finite precision—can we conduct **"counterfactual reasoning experiments"**: given a problem $x$ and a model, first map the fixed points and basin structure of $F_x$, then predict the model's reasoning outcome for any initial belief $p_0$, and finally compare against actual sampling? If the prediction is accurate, does this imply that the "degrees of freedom" of reasoning are far smaller than we think—that the field almost completely determines the trajectory?
+
+12. The formalization of the reasoning field suggests a radical practical direction: **can we directly design $F_x$ without training?** If we know the correct answer $p^*$ and the common wrong answers $\{p_{\text{wrong}}\}$, can we manually construct a vector field—where $p^*$ is the unique global attractor and its basin covers the entire simplex—and then "distill" this into model weights? This would be equivalent to bypassing the empirical training process and directly injecting a geometric specification into the model.
+
+---
 **The core question left by this chapter is:**
 
 **If the reasoning field $F_x$ is an object that can be formally defined, numerically computed, and geometrically diagnosed in belief space—then can we establish a "reasoning topography," such that a model's reasoning behavior is no longer a black box, but an explicit landscape that can be explored, measured, and reshaped?**

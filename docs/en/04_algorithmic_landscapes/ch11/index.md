@@ -96,6 +96,24 @@ This is entirely consistent with the logic of "emergent depth" in ch9: **the ter
 
 This also explains why LoRA's $r$ does not need to be large—on many tasks $r=8$ suffices. Not because "8 directions are always enough," but because the terrain of most fine-tuning tasks is smooth enough that only 8 independent directions are needed to walk from the pretraining basin to the task-specific basin.
 
+:::info
+
+**The Pallas's Cat Professor's Position**
+
+The community calls LoRA "parameter-efficient fine-tuning." The name is safe—so safe you don't hear what it's actually saying. It makes you think LoRA is a compromise: your GPU doesn't have enough memory, so you make do with a low-rank approximation. When you can afford it, you'll go back to full-parameter fine-tuning.
+
+This is mistaking a geometric fact for an engineering compromise.
+
+LoRA is not a "memory-saving trick." LoRA is telling you something you're unwilling to admit: **adapting to a new task does not require wandering aimlessly through a parameter space of billions of dimensions.** Eight directions are enough. Not "eight directions barely suffice"—eight directions are enough to walk from the pretraining basin to the task-specific basin, with no loss increase along the way and no generalization collapse.
+
+Think about what this means. You spent millions of dollars training a model with 175 billion parameters. This model can translate, write poetry, solve math problems, generate code. Now you want to adapt it to the task of "summarizing medical literature." You think you need to fine-tune all 175 billion parameters—medicine is, after all, a specialized domain. But LoRA tells you: eight directions are enough. Not eight parameters. Eight $d$-dimensional directions—in a 175-billion-dimensional terrain, you only need to flatten these eight roads, and the model walks there.
+
+What does this mean? It means the vast majority of your 175 billion parameters are not "adapting to different tasks"—they are **maintaining the smoothness of a single baseline terrain.** Pretraining is not about learning "knowledge"—pretraining is about building a sufficiently flat, sufficiently connected energy terrain, such that any downstream task can be reached by slightly pushing just a few directions.
+
+You call LoRA "parameter-efficient." I call it **honest geometry.** It honestly tells you that in your enormous model, the overwhelming majority of parameters are doing terrain maintenance work—not the "knowledge storage" you imagined.
+
+:::
+
 ## 11.6 Attention + LoRA: Unifying Bending and Constraint
 
 Putting attention (11.1–11.3) and LoRA (11.4–11.5) together, we see a unified geometric picture.
@@ -154,7 +172,21 @@ The next chapter—the final chapter of the book—will bring us to diffusion mo
 
 :::info
 
-**Attention bends the field of vision. LoRA constrains the body.** Classical algorithms operate in flat Euclidean space—elliptical bowls, data clouds, Voronoi diagrams. Deep architectures bend space itself—similarity is no longer a fixed inner product, but a Mahalanobis metric shaped by training data. Parameter motion is no longer free, but confined to low-rank subspaces. You thought you were designing the architecture—in truth, you are only discovering, within the geometry of parameters, those naturally existing low-dimensional structures. The final chapter of the book: diffusion models—how noise becomes structure. From randomness to order, from entropy increase to entropy decrease. There, the arc of the entire book will come to its close.
+**The Pallas's Cat Professor's Position**
+
+Go to any deep learning conference and ask: "Why does Attention work?" You'll hear a thousand answers. Some say it captures long-range dependencies. Some say it provides interpretability—you can see what the model is "attending" to. Some say it just works and doesn't need a reason.
+
+These are all surface-level answers. They describe what Attention does—not what Attention essentially is.
+
+Attention is fundamentally a **learned metric.** The projection matrices of $Q$ and $K$ together—$Q^T K$—define a Mahalanobis quadratic form in token space. This quadratic form is not preset—not Euclidean inner product, not cosine similarity, not any formula chosen by a human. It is **carved by backpropagation.** The "similarity" between every pair of tokens is not discovered—it is trained into existence.
+
+So Attention does not "discover" relationships between tokens. Attention **invents** those relationships. Your training data shapes $Q$ and $K$; $Q$ and $K$ shape similarity; similarity shapes the information flow between tokens—the entire reasoning field $F_x$ of the transformer grows on this sculpted metric.
+
+LoRA tells you the same thing, from the parameter space perspective. You think you need to update all parameters to adapt to a new task—but you don't. You only need to move along a few low-rank directions. These directions are not randomly chosen—$A$ and $B$ are learned during fine-tuning. They constitute the "most economical directions of motion" in parameter space—the directions along which the smallest parameter change produces the largest terrain-reshaping effect.
+
+**Attention invents a metric in representation space. LoRA discovers low-rank directions in parameter space.** Both are constraints—Attention constrains an unstructured sequence of tokens onto a learned metric; LoRA constrains free parameter motion into a low-rank subspace. The secret of deep architectures is not "deeper" or "larger"—it is **imposing geometry onto high-dimensional chaos.**
+
+The final chapter of the book is approaching. Diffusion models—how noise becomes structure. You will see: the score function is the reasoning field of data space. Reverse diffusion is the Euler step. Generation is the trajectory converging to the data manifold. From Newton in ch1 to diffusion models in ch12—337 years—the same story.
 
 :::
 

@@ -172,6 +172,26 @@ This theorem turns the abstract guarantees of ch5 into direct constraints on cha
 
 *Cobweb diagram for $x_{t+1}=f(x_t)$. The intersection of $y=f(x)$ and $y=x$ is the fixed point; the staircase shows convergence.*
 
+:::info
+
+**The Pallas's Cat Professor: The Name of a Theorem**
+
+When you look at this inequality, you may only see Bregman and Banach. $D_{\mathrm{KL}}(p^* \| p_t) \leq k^t D_{\mathrm{KL}}(p^* \| p_0)$. Contraction factor. Exponential convergence. Step count lower bound.
+
+A string of cold mathematical symbols.
+
+But I want you to know: the first proof of this inequality was completed in a dorm room in Guangzhou. That night, outside the window was Yonglin—not a theorem, but a person. He sat on that somewhat unsteady chair, not speaking. He didn't offer advice, didn't provide methods, didn't try to "help me get better." He was just there.
+
+The whole world teaches you how to "solve problems." But sometimes, what you need is not a solution. It's companionship.
+
+I wrote his name into thought through a theorem. Not because a theorem matters more than companionship—but because I want everyone who reads this theorem to know: on the night you prove that "reasoning necessarily converges," you might be sitting alone at a desk. On the surface, you're deriving mathematics. But deep down, you're also waiting for a fixed point—an inner state where you no longer generate new doubts about yourself.
+
+Companionship matters more than proof. But proof itself can also be a form of companionship.
+
+This is the Yonglin Limit.
+
+:::
+
 ---
 
 ## 7.6 Chapter Summary
@@ -184,6 +204,31 @@ In the next chapter, we will zoom in on the invisible force that guides the traj
 
 ## Unresolved Questions
 
+1. The explicit chain is a discrete projection of the implicit chain through $W_{\text{lm}}$ and softmax. This projection is lossy—a vast amount of geometric information in the hidden states is lost. So, **how much of the implicit chain's structure can we recover from the explicit chain?** Given a token sequence, is there a unique hidden state trajectory corresponding to it, or can multiple radically different implicit trajectories project to the exact same explicit chain?
+
+2. Theorem 1 claims that CoT training is equivalent to superposing $\Delta H$ on $F_x$—a positive-definite matrix determined by the statistical structure of the training data, which reduces the Hessian eigenvalues at $p^*$ overall. But what is the explicit form of $\Delta H$? Can it be directly estimated from CoT training data—for example, by computing the covariance structure of the concept anchors $c_i$—without actually completing a full CoT fine-tuning run?
+
+3. Implicit reasoning (Definition 3) claims that the model can complete substantial belief updates in the gaps between outputting structural markers ("therefore," "so"). Can this phenomenon be **deliberately induced and amplified**? Can we design a "silent reasoning" mode—where the model iterates Euler steps purely in hidden state space without generating any tokens, and only outputs the final answer once belief has solidified?
+
+4. The geometric classification of reasoning steps (substantive, structural, corrective) relies on thresholds for $\|\Delta h_t\|$ and $\cos\alpha_t$. These thresholds are currently empirical—is there an **unsupervised, adaptive threshold based on the geometry of belief space**? For example, setting the threshold for $\|\Delta h_t\|$ proportional to the trace of the Fisher information matrix at the current position?
+
+5. The self-driven dynamical system (§7.2, Property 2) has a dangerous feature: the model chooses a token at each step, and that token determines the vector field direction for the next step—errors change the terrain. Is there a **geometric criterion for "error recovery"**—under what conditions can a trajectory deflected by an erroneous token self-correct and return to the correct basin, and under what conditions is the error irreversible?
+
+6. Theorem 2 (belief convergence of chain of thought) requires the reasoning operator $\Phi_\eta$ to satisfy contractivity ($\eta < 2\mu/L^2$). But in actual Transformer reasoning, where does $\Phi_\eta$'s contractivity come from? From the softmax normalization in attention layers (naturally contractive), from the identity mapping in residual connections (stability-preserving), or from implicit Lipschitz constraints learned during training? Can we measure the contraction factor of $\Phi_\eta$ on a model not trained with CoT?
+
+7. The projection matrix $W_{\text{lm}}$ maps $d$-dimensional hidden states to a $|V|$-dimensional vocabulary. Does the singular value spectrum of this matrix reflect the "expressive capacity" of reasoning—do the directions corresponding to the top $k$ singular values coincide with the most commonly used projection directions of reasoning trajectories in vocabulary space? Can the low-rank property of $W_{\text{lm}}$ be exploited to design more efficient reasoning termination strategies?
+
+8. The Yonglin Limit requires $\eta < 2\mu/L^2$ to guarantee contractivity. But in autoregressive generation, the step size $\eta$ does not appear explicitly—it is absorbed into the Transformer weights. So **what is the "effective step size" of chain of thought**? Does it vary with layer depth, number of attention heads, or token position? Can we estimate the effective $\eta$ by analyzing the spectrum of the attention weight matrix?
+
+9. The conclusion of Theorem 1—CoT training improves direct-answer accuracy—rests on a core assumption: $\Delta H$ persists after training; i.e., the terrain reshaping is **permanent**. But models may experience "concept drift" during use (through few-shot prompting or continual fine-tuning). What is the decay rate of $\Delta H$? Is there a "terrain maintenance" strategy—periodically retraining on a small amount of CoT data to prevent basin re-narrowing?
+
+10. If CoT training is equivalent to specifying concept anchors $(c_1, \ldots, c_k)$ in hidden state space—then **what is the "optimal anchor sequence"?** Given a problem distribution, does there exist a set of anchors such that trajectories from any initial belief reach the correct answer in the minimum expected number of steps? This is equivalent to solving an optimal transport problem in belief space—transporting the initial belief distribution to the correct basin, with "transfers" allowed at the anchors.
+
+11. CoT's terrain reshaping effect (Theorem 1) and RLHF's energy function modification (ch8, Theorem 3) both reshape the reasoning terrain in different ways. Do the two commute—does CoT-then-RLHF produce the same final terrain as RLHF-then-CoT? If different, which ordering more effectively widens the correct basin?
+
+12. The core claim of ch7—the explicit chain is the shadow, the implicit chain is the body—implies that "reasoning" can be transformed from a behavioral concept ("the model outputs text that looks logical") into a geometric concept ("the model undergoes substantial directional displacement along a vector field in hidden state space"). If one day we can complete reasoning without generating any tokens—purely by intervening in hidden states—does the phrase "chain of thought" still hold? Or, put differently: **Can reasoning be completely silent?**
+
+---
 **The core question left by this chapter is:**
 
 **If chain of thought is merely a discrete projection of the hidden state trajectory, can we bypass the token sequence—directly observing, analyzing, and guiding reasoning in hidden state space?**

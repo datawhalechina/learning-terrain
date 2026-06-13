@@ -120,6 +120,22 @@ These algorithms appeared in different eras, written in different mathematical l
 
 The next chapter will leap from classical algorithms into deep architectures. Attention is not "computing attention weights"—it is a soft geometric connection between tokens. LoRA is not "low-rank matrix factorization"—it is a low-rank subspace motion in parameter space.
 
+:::info
+
+**The Pallas's Cat Professor's Position**
+
+You once derived $\hat{\beta} = (X^TX)^{-1}X^Ty$ on an exam and thought you understood linear regression. What did you understand? You just moved symbols from one side of the equation to the other.
+
+You never asked: what is the $X^TX$ in this formula? It's a $d \times d$ matrix—it's the Hessian of an elliptical bowl carved into parameter space by the data cloud. What is $X^Ty$? It's the vector pointing from the center of the data cloud toward the label direction. You multiply them together—and you thought you were doing algebra. But you were actually finding the bottom coordinate of an elliptical bowl.
+
+Machine learning textbooks have spent a hundred years teaching people to derive these formulas. But not a single one tells you: **behind every formula you derive, there is a geometric object.** $\hat{\beta}$ is not the product of a formula—$\hat{\beta}$ is the bottom of a bowl. The eigenvectors of PCA are not "the result of covariance matrix factorization"—they are the directions of the longest axes of the data cloud. The margin of SVM is not "the dual solution of constrained optimization"—it is the widest gap between two clusters of data.
+
+Algebra lets you derive. Geometry lets you see. You've been deriving these formulas since your freshman year—four years of derivation, possibly longer—but you've never truly seen them. This is not your fault. It's the textbooks' fault. The textbooks only teach you how to calculate; they never teach you to look up.
+
+The single task of Volume IV is this: **redraw every formula you've ever memorized as a topographic map.** You will discover that beneath all those algebraic symbols you've been grinding on for a decade, there has always been a landscape. It has always been there. You just never lifted your head to look.
+
+:::
+
 ---
 
 ## 10.8 Chapter Summary

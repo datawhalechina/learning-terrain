@@ -118,6 +118,10 @@ It is like cooking a pot of soup. When the temperature is low, the ingredients s
 
 This is why increasing temperature at inference time does not necessarily hurt accuracy. Moderate temperature is a **belief escape tool**—it rescues trajectories trapped in shallow error basins and gives them a chance to find deeper correct basins. Temperature is not blind noise—in the context of the energy landscape, temperature is selective: it preferentially clears shallow basins and preserves deep ones.
 
+![Temperature-assisted escape from belief basins](/figures/ch09_temperature_escape_tikz.svg)
+
+*Energy landscape of temperature-assisted escape. Horizontal axis: belief coordinate $p$; vertical axis: energy $E(p)$. Shallow red basin: wrong attractor $p_{\text{wrong}}$ — the basin is shallow ($\Delta E$ small), easily escaped with slight heating. Deep blue basin: correct attractor $p^*$ — the basin is deep ($\Delta E$ large), unshaken even by high temperature. Orange trajectory: belief state starting from the wrong basin, gradually gaining energy under random thermal perturbations at temperature $T$, crossing the saddle (black dot), and ultimately sliding into the bottom of the correct basin under gradient guidance. Escape probability follows the Arrhenius formula: $\mathbb{P}(\text{escape}) \approx 1 - \exp(-(t/t_0) \cdot e^{-\Delta E/T})$ — higher temperature and smaller barriers produce faster escape.*
+
 Temperature is an escape tool—but there is one final question: **how does the model know when to stop?**
 
 ## 9.6 Belief Fixed Points: The Geometric Stopping Criterion for Reasoning
@@ -131,6 +135,10 @@ Temperature is an escape tool—but there is one final question: **how does the 
 
 **Practical significance**: The KL freezing criterion transforms "when should reasoning end" from a manually set maximum token count into a problem automatically decided by the local geometry of belief space. Simple problems—KL drops rapidly, freezing early. Complex problems—KL drops slowly, requiring more steps. You no longer need to ask "how many tokens should be generated?"—you only need to ask "has belief frozen?"
 
+![KL solidification curve: belief divergence decays exponentially with reasoning steps](/figures/ch09_kl_solidification_tikz.svg)
+
+*Time evolution of the KL solidification criterion. Horizontal axis: reasoning step $t$; vertical axis: KL divergence between successive belief distributions $\Delta_t = D_{\mathrm{KL}}(p_t\|p_{t-1})$. Blue curve: $\Delta_t \sim k^t \Delta_0$ — the contraction factor $k<1$ guarantees exponential decay. Red dashed line: preset threshold $\epsilon$. When $\Delta_t$ first crosses below $\epsilon$ and remains there for $m$ consecutive steps (green shaded region), belief has solidified — reasoning terminates at $T_{\text{stop}}$ steps. Stronger contraction (smaller $k$) yields faster decay and smaller $T_{\text{stop}}$. The choice of $\epsilon$ determines solidification precision — smaller $\epsilon$ gives more precise solidification but requires more steps.*
+
 ---
 
 ## 9.7 Chapter Summary
@@ -143,6 +151,31 @@ Volume III concludes here. From the projection of chain of thought (ch7), to the
 
 ## Open Problems
 
+1. Theorem 1 gives $T_{\min}$ depending logarithmically on $D_0$ (the initial KL divergence) but polynomially sensitive to $\mu, L$, and $\eta_{\max}$. This means **the primary bottleneck on reasoning steps is not "how hard the problem is," but "how low the speed limit is along the path."** Can we experimentally verify this logarithmic-vs-polynomial dependence by analyzing the relationship between CoT length and the model's internal Hessian spectrum on large-scale reasoning datasets (MATH, GSM8K)?
+
+2. The roughness $\kappa$ (Definition 1) is computed along the path $p_0 \to p^*$—but this path is unknown before reasoning completes. **Can we estimate $\kappa$ before reasoning begins?** For example, purely from the semantic embedding of the problem $x$ and the model's initial belief $p_0$—without actually traversing the full trajectory—can we predict the roughness of this path?
+
+3. Theorem 3 (landscape reshaping by training) claims three effects—basin widening, false attractor elimination, ridge smoothing—occur monotonically during training. But does "monotonic" strictly hold? Is it possible that training involves **temporary "terrain deterioration"**—for example, during phases where the learning rate is too large and causes oscillations, the reasoning field $F_x$ temporarily becomes more rugged rather than smoother?
+
+4. Theorem 4 (scale-smoothness hypothesis) asserts $\kappa^{(N)} = O(N^{-\alpha})$—roughness decays as a power law with model scale. What is the value of $\alpha$? Does it depend on model architecture (Transformer vs Mamba vs hybrid)? Is there a **critical roughness** $\kappa_{\text{crit}}$ such that when $\kappa^{(N)}$ first drops below it, a specific reasoning capability "emerges" in behavioral tests—and is this $\kappa_{\text{crit}}$ consistent across different tasks?
+
+5. In Theorem 5, the temperature-assisted escape rate $\mathbb{P}(\text{escape}) \approx 1 - \exp(-(t/t_0) \cdot \exp(-\Delta E/T))$ depends on $\Delta E$—the energy barrier of the wrong basin. But what is $\Delta E$ in a real model? Does it equal the KL divergence between the wrong attractor $p_{\text{wrong}}$ and the nearest saddle? Can we estimate $\Delta E$ without actually running reasoning, purely by analyzing the Hessian of $E(p)$ at $p_{\text{wrong}}$?
+
+6. The KL solidification criterion (Theorem 6) uses $\Delta_t = D_{\mathrm{KL}}(p_t\|p_{t-1}) < \epsilon$ for $m$ consecutive steps as the stopping condition. But does there exist a **theoretically optimal choice** for $\epsilon$ and $m$—determined jointly by the contraction factor $k$ and the required precision—rather than empirical tuning? Specifically, given $k$ and the allowable final KL error $\delta$, can we derive an analytic expression for $\epsilon$ and $m$?
+
+7. Temperature injection (Theorem 5) and SGD noise (ch4, §4.7) share the same mathematical soul—both use random perturbations to help the system escape shallow local traps. But temperature operates in belief space, while SGD noise operates in parameter space. **If noise is injected in both spaces simultaneously—temperature during inference, small-batch SGD during training—do their escape effects superpose or cancel?** Is there an optimal "joint temperature–SGD noise" ratio?
+
+8. The landscape reshaping by training (Theorem 3) describes the evolution of $F_x$ for a single problem $x$ during training. But **do the reasoning fields of different problems co-evolve** during training—i.e., do the roughness values $\kappa_x$ of all $F_x$ decrease at approximately the same rate? Or do the terrains of "easy problems" flatten first, while those of "hard problems" suddenly improve only late in training—corresponding to behavioral "unlocking" of different-difficulty tasks at different training stages?
+
+9. If reasoning length is determined by terrain—can we **deliberately "pave roads" in belief space** to shorten reasoning? Specifically, at a certain training stage, we could targetedly increase the coverage density of training data in "regions where $\eta_{\max}$ is extremely small along the path"—a kind of "precision terrain surgery" rather than uniform data augmentation. Would such surgical training interventions be more efficient than uniformly adding more training data?
+
+10. The $T_{\min}$ lower bound of Theorem 1 assumes consistent $\mu$ and $L$ along the entire path. But in actual reasoning, $\mu$ and $L$ are **segment-dependent**—some regions have sudden drops in $\mu$ (terrain flattens, direction unclear) or sudden increases in $L$ (terrain steepens, step size drops sharply). Can the lower bound be generalized to the **piecewise-constant** $\mu$ and $L$ case—giving a tighter $T_{\min}$ estimate that accounts for the local structure of the terrain?
+
+11. Belief solidification (Theorem 6) provides a geometric stopping criterion for reasoning—but this assumes the reasoning operator is contractive ($k < 1$). In non-contractive regions ($k \geq 1$), $\Delta_t$ may oscillate without converging—belief swinging among multiple fixed points. **Can we automatically detect the loss of contractivity when the solidification criterion fails, and trigger intervention**—for example, temporarily injecting temperature to escape the current oscillatory region?
+
+12. The three chapters of Volume III build the complete geometric picture from "reasoning is text" to "reasoning is a trajectory" to "reasoning is flow in a field." But the entire theory rests on one core assumption: **the reasoning field $F_x$ is time-invariant**—it does not change during a single reasoning episode (it depends only on the current belief $p$, not explicitly on the step index $t$). If $F_x$ itself changes during reasoning because of some effect (e.g., the model "learns something new" during long reasoning—test-time adaptation or in-context learning), would the positions of the fixed points also drift? This would elevate "dynamics of the reasoning field" to "**dynamics of the field of the reasoning field itself**"—a meta-level dynamical system.
+
+---
 **The core question left by this chapter is:**
 
 **If the length of reasoning is determined by the terrain of belief space—then can we use "terrain surgery" (targeted training interventions) to precisely shorten the reasoning length for specific types of problems, without affecting performance on other problems?**
