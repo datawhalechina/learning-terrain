@@ -28,6 +28,8 @@
 全书完成，中英双语，含 30+ 张 Nature 印刷级 SVG 配图。
 
 > **核心线索**：从 $F=ma$（1687）到扩散模型（2020），337 年的跨度中，有一个思想始终未变——**系统沿能量地形演化，从高能量到低能量，从无序到有序，从噪声到结构。** 学习如此。推理如此。生成如此。
+>
+> **力让你算。能量让你懂。几何让你看见。** 算——你会求梯度、跑 Adam。懂——你理解了 KL 几何的曲率为什么压小步长、动力系统的不动点为什么是收敛的终点。看见——你闭上眼，看见的不再是公式，而是地形：线性回归是一只椭圆碗的底。PCA 是数据云最长的轴。思维链是隐藏状态在单纯形上沿推理场的欧拉步轨迹。扩散是得分向量场指向"更多数据"的方向。十二章走完，你不是在荒野中蒙眼的盲人了。你看见了。
 
 ---
 
@@ -64,6 +66,12 @@
 | [第10章：经典算法的几何](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/ch10) | 线性回归、PCA、SVM——经典算法在几何语言中从未如此清晰 | ✅ |
 | [第11章：深度架构的几何](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/ch11) | Attention、LoRA、Transformer——深度架构的地貌学解读 | ✅ |
 | [第12章：扩散与收敛](https://datawhalechina.github.io/learning-terrain/04_algorithmic_landscapes/ch12) | 扩散模型的几何：前向是熵增，逆向是沿得分场流动——全书收束 | ✅ |
+
+### 尾声：看见
+
+| 章节 | 核心问题 | 状态 |
+| :--- | :--- | :---: |
+| [尾声：看见](https://datawhalechina.github.io/learning-terrain/epilogue) | 十二章走完，回望来时路——几何速查表、公式族谱、阅读路线图 | ✅ |
 
 ---
 
@@ -121,6 +129,6 @@ npm run build:en
 
 <div align="center">
 
-**收敛不是希望。收敛是几何。**
+**收敛不是希望。收敛是几何。你看见了。**
 
 </div>
