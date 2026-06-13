@@ -25,6 +25,6 @@ But what is the destination? How do you know when you've arrived? Volume III—T
 ---
 
 **Volume II: Walking and Belief**
-- [Chapter 4: Ways of Walking: Optimizers and Regularization](ch04)
-- [Chapter 5: The Non-Euclidean World: Bregman Divergence and KL Divergence](ch05)
-- [Chapter 6: Dynamical Systems and Fixed Points: From Lyapunov to DEQ](ch06)
+- [Chapter 4: Ways of Walking: Optimizers and Regularization](./ch04/)
+- [Chapter 5: The Non-Euclidean World: Bregman Divergence and KL Divergence](./ch05/)
+- [Chapter 6: Dynamical Systems and Fixed Points: From Lyapunov to DEQ](./ch06/)

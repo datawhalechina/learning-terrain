@@ -35,6 +35,6 @@ Are you ready? Chapter 1 begins with $F=ma$—but not the $F=ma$ you memorized.
 ---
 
 **Volume I: The Terrain of Learning**
-- [Chapter 1: Why Learning Needs Geometry](ch01)
-- [Chapter 2: Body and Vision: Parameter Space and Representation Space](ch02)
-- [Chapter 3: Loss Terrain and Gradient Motion](ch03)
+- [Chapter 1: Why Learning Needs Geometry](./ch01/)
+- [Chapter 2: Body and Vision: Parameter Space and Representation Space](./ch02/)
+- [Chapter 3: Loss Terrain and Gradient Motion](./ch03/)

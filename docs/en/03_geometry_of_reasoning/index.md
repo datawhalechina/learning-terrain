@@ -27,6 +27,6 @@ Volume III's answer: **Don't look at the tokens. Look at the trajectory. Look at
 ---
 
 **Volume III: The Geometry of Reasoning**
-- [Chapter 7: Chain of Thought: Projection of the Reasoning Trajectory](ch07)
-- [Chapter 8: Reasoning Fields: Attractors and Verifiers](ch08)
-- [Chapter 9: Long Reasoning and Landscape Reshaping](ch09)
+- [Chapter 7: Chain of Thought: Projection of the Reasoning Trajectory](./ch07/)
+- [Chapter 8: Reasoning Fields: Attractors and Verifiers](./ch08/)
+- [Chapter 9: Long Reasoning and Landscape Reshaping](./ch09/)

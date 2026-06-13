@@ -21,6 +21,6 @@ Volume IV is not "application." Volume IV is **coming home**. You've walked nine
 ---
 
 **Volume IV: Algorithmic Landscapes**
-- [Chapter 10: Geometry of Classical Algorithms](ch10)
-- [Chapter 11: Geometry of Deep Architectures](ch11)
-- [Chapter 12: Diffusion and Convergence](ch12)
+- [Chapter 10: Geometry of Classical Algorithms](./ch10/)
+- [Chapter 11: Geometry of Deep Architectures](./ch11/)
+- [Chapter 12: Diffusion and Convergence](./ch12/)
