@@ -91,6 +91,18 @@ But the model does not know which fixed point is called "the correct answer." Th
 If that place happens to be the human-defined correct answer—we say the model "reasoned correctly." If that place happens to be a human-defined incorrect answer—we say the model "made a mistake." But from the model's perspective, the two processes are strictly symmetric in mathematics: both are gradient descents into a local energy minimum.
 
 This is why the model confidently makes mistakes. It is not "guessing wrong"—it is walking, with exactly the same determinism, toward an incorrect fixed point. Its trajectory is mathematically just as smooth, just as continuous, just as convergent as the trajectory toward the correct fixed point. An incorrect belief is a form of **geometric correctness**—inside the wrong basin, all arrows point toward the basin center.
+
+These definitions can be felt through a minimal example. Consider a binary multiple-choice question — "Which of the following is the capital of France? A. Paris B. London." The model reads the question, and its initial belief distribution is $p_0 = (0.55, 0.45)$ — leaning slightly toward Paris, but far from certain.
+
+The reasoning field $F_x$ on this simplex (a line segment, from $(1,0)$ to $(0,1)$) has the following structure: $p^*_1 = (0.98, 0.02)$ (the correct attractor — "Paris"), $p^*_2 = (0.02, 0.98)$ (the incorrect attractor — "London"), with a saddle near $(0.5, 0.5)$ separating the two.
+
+If you start from $p_0 = (0.55, 0.45)$, the vector field $F_x(p_0)$ points toward $(0.98, 0.02)$ — the gradient is already pulling you toward Paris. You take one step in that direction, and your belief becomes $(0.7, 0.3)$. The field's arrows grow stronger — because you are now closer to the correct basin's rim. Two more steps, and belief solidifies at $(0.97, 0.03)$ — you no longer move.
+
+But if the training data contains systematic noise — say, certain texts frequently place "London" and "France" in the same paragraph — then $p^*_2$'s basin may be deeper than you think. A belief starting from $p_0 = (0.4, 0.6)$ — initially biased toward London — will follow the field's arrows toward $(0.02, 0.98)$, and solidify there with equal confidence.
+
+This example reveals the entire essence of the reasoning field: **the field itself has no moral valence. At every position, it merely indicates the direction of "think this way." Where you ultimately stop depends on where you start — and on the terrain structure along the entire path.**
+
+
 :::
 
 ![Three attractor basins](/figures/ch08_attractor_basins_tikz.svg)
@@ -100,6 +112,21 @@ This is why the model confidently makes mistakes. It is not "guessing wrong"—i
 ![Reasoning field simplex: vector field, attractors, and trajectories](/figures/ch08_reasoning_field_simplex_tikz.svg)
 
 *The complete reasoning field $F_x$ on the probability simplex $\Delta^2$. Blue basin: correct attractor $p^*_1$ — wide, convergent from distant directions. Red basins: error attractors $p^*_2$ (plausible error) and $p^*_3$ (narrow crevice) — shallow and narrow, capturing only trajectories that approach from specific directions. Black dots are saddle points — they partition the basins of different attractors (separatrices). Green trajectory: starting from uniform initial belief $p_0$, crosses the saddle and successfully falls into the correct basin. Orange trajectories: starting from different initial positions, captured by error basins — within their respective basins, all arrows point to the center; the reasoning is mathematically equally "correct."*
+
+:::info
+
+**Mr. Pallas's Cat: Data Is Terrain, Terrain Is Destiny**
+
+Theorem 1 has an unsettling philosophical corollary. If systematic confusions in the training data carve incorrect basins into the reasoning field — then a model's "bias" is not a bug that can be patched. Bias is the terrain itself.
+
+Every systematic association you write into your training data — "doctor" always with "he," "nurse" always with "she"; "success" always co-occurring with white faces; "crime" always co-occurring with certain neighborhood names — every single co-occurrence digs a new pit in the energy terrain. Individually these pits are not deep — a single co-occurrence is one data point among millions. But a hundred thousand co-occurrences — a hundred thousand tiny probability biases — together dig an incorrect basin from which the model cannot escape.
+
+And Theorem 1 tells you: to fill in this basin, you cannot simply sprinkle a thin layer of soil on top — you cannot just do "debiasing training" or "RLHF alignment." Those are terrain cosmetic surgeries — they make the basin look shallower, but the depression at the bottom remains. To truly eliminate this basin, you must return to the training data — return to the millionth co-occurrence that linked "doctor" to "he" — and correct or delete that data point.
+
+This is Theorem 1's most uncompromising conclusion: **once terrain has been carved by data, only data can fill it in.** You can cover it with anything — alignment, filtering, prompt engineering — but the basin's outline is forever the line drawn by the data.
+
+:::
+
 
 These classifications answer "why does the model produce wrong answers"—but another question is more fundamental: **where do incorrect attractors come from?** They are not random—they are pits carved into the energy landscape by the statistical structure of the training data.
 
@@ -130,6 +157,22 @@ $$F_x^{\text{ver}}(p) = F_x(p) + \eta_v \nabla_p V(p, x)$$
 *Geometric mechanism of verifier-based attractor elimination. Left: original reasoning field $F_x$ — correct attractor $p^*$ (blue basin, deep and wide) and wrong attractor $p_{\text{wrong}}$ (red basin, shallow and narrow) coexist, with a saddle (black dot) separating their basins of attraction. The green trajectory from $p_0$ successfully converges to $p^*$, but other initial beliefs may slide into the wrong basin. Right: modified field $F_x^{\text{ver}}$ after superposing the verifier gradient $\eta_v \nabla_p V$ — purple dotted arrows show the repulsive force exerted by the verifier around $p_{\text{wrong}}$. The wrong basin is filled in (red cross), and the vector field now points entirely toward $p^*$. Even trajectories starting near the former wrong basin are pulled back toward the correct attractor.*
 
 A verifier superimposes a repulsive field at individual reasoning steps. But the verifier requires an external evaluation signal (whether the answer is correct). In many tasks—writing, translation, dialogue—there is no objective "correct answer." In these cases, we need a more fundamental way to reshape the terrain.
+
+
+
+:::info
+
+**Mr. Pallas's Cat: The Asymmetry of Verification**
+
+The verifier is mathematically symmetric — $F_x^{\text{ver}} = F_x + \eta_v \nabla_p V$. But its effect in belief space is radically asymmetric.
+
+Because correct basins are typically far deeper than incorrect ones (large $\Delta E$), the verifier's gradient $\eta_v \nabla_p V$ does almost nothing near the correct basin — belief is already there, the gradient has no work to do. But near incorrect basins — those shallow depressions carved by training data noise — the same gradient magnitude can uproot the entire basin.
+
+This is the fundamental reason verifiers are efficient: **they waste no computation on places that are already correct.** Their entire repulsive force is concentrated around the shallow incorrect depressions — exactly the boundaries that need guarding.
+
+This yields a practical rule: the verifier strength $\eta_v$ does not need to be large. You only need it large enough to eliminate the shallowest incorrect basins. Because deep correct basins need no help from you, and the shallowest incorrect basins are the ones most easily slipped into by random initial beliefs — eliminate those, and you eliminate the vast majority of reasoning failures.
+
+:::
 
 ## 8.5 Formalization of RLHF: Energy Function Modification
 
@@ -171,6 +214,19 @@ Three diagnostic metrics, all defined by geometric properties of $F_x$:
 These metrics are currently rarely measured in practice—but they provide a geometric assessment complementary to behavioral testing for determining "whether a model is ready."
 
 ---
+
+While these three metrics cannot be computed exactly on a high-dimensional simplex — because exhaustively traversing a $|V| \approx 50000$-dimensional probability space is computationally infeasible — their proxies can be efficiently estimated in hidden state space.
+
+**Proxy for basin coverage**: For a set of belief trajectories starting from different prompt variants, measure the proportion that converge to the correct attractor. No need to traverse the simplex — simply sample from the naturally occurring distribution of initial beliefs. That proportion is the effective coverage of the correct basin on that distribution.
+
+**Proxy for basin separation**: Sample near the correct attractor $p^*$, perform linear interpolation along random directions, and monitor when the KL divergence begins to drop sharply (signaling that you have entered another basin's attraction region). The KL divergence between $p^*$ and the first sharp-drop point is a lower-bound estimate of basin separation.
+
+**Proxy for field strength uniformity**: Measure the variance of $\|\Delta h_t\|$ at each step along belief trajectories. If the variance differs by orders of magnitude across different stages of the trajectory — e.g., extremely low variance in the first half (lost) and extremely high variance in the second half (oscillating) — the field strength is severely non-uniform.
+
+Verifiers eliminate incorrect attractors by superposing a repulsive field — but they do not change the width of correct basins. RLHF modifies the energy function $E(p)$, redistributing stability among all fixed points — but it cannot create new basins, only reshape existing ones. These two approaches answer the two halves of a single question: verifiers answer "how to eliminate the wrong" — RLHF answers "how to strengthen the right." And the Yonglin Limit guarantees, at the deepest level: no matter how you reshape the terrain, as long as contractivity holds, convergence is inevitable. You do not choose whether reasoning converges — you only choose which fixed point it converges to.
+
+All three proxy metrics can be computed "for free" during model inference — no additional training or annotation required. They provide a purely geometric, accuracy-independent dimension for evaluating "how reliable is this model's reasoning on this problem."
+
 
 ## 8.7 Chapter Summary
 

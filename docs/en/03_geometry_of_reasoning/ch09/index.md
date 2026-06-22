@@ -57,9 +57,36 @@ A large $\kappa$ means the terrain is non-uniform—some regions are extremely s
 
 ![Rough vs smooth terrain](/figures/ch09_rough_vs_smooth_tikz.svg)
 
+You can feel the numerical meaning of $\kappa$ through two extreme examples. Consider a binary classification problem with the model's current belief distribution $p_t = (0.6, 0.4)$.
+
+On a **smooth terrain** ($\kappa \approx 0.2$): the Hessian eigenvalues are nearly constant along the path — $\lambda_1 \approx 5$, $\lambda_2 \approx 4$. At every step, the safe step size is $\eta_{\max} \approx 0.1$, and the contraction factor $k \approx 0.7$. The KL divergence from $p_0$ to $p^*$ decays to 70% of its previous value each step. Within 10 steps, belief is essentially solidified.
+
+On a **rugged terrain** ($\kappa \approx 1.5$): the Hessian eigenvalues fluctuate violently. Along one segment, $\lambda_1 = 100$ (a certain probability dimension is extremely steep), $\eta_{\max}$ is crushed to $10^{-4}$ — the model can barely take a step. Past this "speed-limit zone," the terrain abruptly flattens — $\lambda_1 = 0.5$, directions blur, and the model wanders across a nearly flat plateau. The same road: the first half it "dares not walk," the second half it "does not know where to walk."
+
+This is the geometric essence of $\kappa$: **it does not measure the average steepness of the terrain — it measures the terrain's "temper."** A smooth terrain has a mild temper; you can use a single step size from start to finish. A rugged terrain is volatile; you need to adjust your stride to its every-meter mood. And Theorem 2 tells us: fixed-step Euler's method on a bad-tempered terrain will eventually go wrong.
+
+
 *Rough vs smooth terrain. High-frequency ripples trap small models; large models smooth these out. $\kappa$—the roughness coefficient—quantifies this from the Hessian spectrum.*
 
 But the terrain is not immutable. Every training iteration, every gradient update, is reshaping this reasoning landscape.
+
+
+:::info
+
+**Mr. Pallas's Cat: Training Is Pouring Water onto the Mountain**
+
+There is something worth pausing to consider. Theorem 3 says training flattens the terrain — but how does this happen? Every gradient descent step you take moves your body through parameter space — how does that make the reasoning field $F_x$ smoother?
+
+The answer lies in ch5's $\eta_{\max}(p) = 2\min(p_i)^2 / \max(p_i)$. This formula says: the safe step size is determined by how "crowded" the model is at the simplex edge. Early in training, the model's belief distribution is sharp — extremely certain about some classes, almost completely excluding others. $\min(p_i)$ is tiny, $\eta_{\max}$ is tiny — the terrain in these edge regions is "rugged."
+
+As training progresses, the model sees more data, and its belief distribution becomes more "rounded" — no longer extremely certain, no longer extremely exclusionary. $\min(p_i)$ increases, $\eta_{\max}$ increases — the safe step size in the same direction automatically grows larger.
+
+This is the geometric mechanism of Theorem 3: **training does not physically "bulldoze" the terrain flat — training flattens the terrain by making the model's belief distribution more uniform, indirectly raising the safe-step-size ceiling at every position.** The basin widens not because the Hessian's eigenvalues got larger — but because $\min(p_i)$ around $p^*$ got larger, $\eta_{\max}$ followed, and the model dares to take bigger steps at every position.
+
+So training is not pouring water onto the mountain to make it shorter. Training is lengthening the climber's legs.
+
+:::
+
 
 ## 9.3 The Landscape Reshaping Theorem of Training
 
@@ -123,6 +150,55 @@ This is why increasing temperature at inference time does not necessarily hurt a
 *Energy landscape of temperature-assisted escape. Horizontal axis: belief coordinate $p$; vertical axis: energy $E(p)$. Shallow red basin: wrong attractor $p_{\text{wrong}}$ — the basin is shallow ($\Delta E$ small), easily escaped with slight heating. Deep blue basin: correct attractor $p^*$ — the basin is deep ($\Delta E$ large), unshaken even by high temperature. Orange trajectory: belief state starting from the wrong basin, gradually gaining energy under random thermal perturbations at temperature $T$, crossing the saddle (black dot), and ultimately sliding into the bottom of the correct basin under gradient guidance. Escape probability follows the Arrhenius formula: $\mathbb{P}(\text{escape}) \approx 1 - \exp(-(t/t_0) \cdot e^{-\Delta E/T})$ — higher temperature and smaller barriers produce faster escape.*
 
 Temperature is an escape tool—but there is one final question: **how does the model know when to stop?**
+
+:::info
+
+**Mr. Pallas's Cat: Temperature and Honesty**
+
+There is a piece of community folklore: setting temperature to 0 (greedy decoding) at inference time is the "safest" — the model always picks the most probable token and won't "babble."
+
+This advice comes from a surface-level understanding of temperature: temperature = randomness, randomness = uncontrollable. But it completely ignores the existence of the energy terrain.
+
+Setting temperature to 0 is equivalent to locking the belief state onto the gradient direction at the current position. If the current position happens to be at the bottom of an incorrect basin, your belief will be trapped there forever — because there is no stochastic perturbation to help you cross the basin's barrier. Zero temperature is the **prisoner of complacency** — it makes you more correct when you are correct, and makes you unable to correct yourself when you are wrong.
+
+Moderate temperature is different. It gives you a tiny probability — $e^{-\Delta E/T}$ at each step — of crossing the barrier and escaping the wrong basin. Temperature is not "randomness" — temperature is **the minimum energy required to escape error**. It does not need to be large — it only needs to be slightly larger than the barrier of the shallowest incorrect basin.
+
+This is why many experienced practitioners avoid temperature=0 on complex reasoning tasks. Not because they are pursuing "diversity" — but because they are leaving the model an escape route from wrong basins.
+
+This criterion's cleverness lies in its **self-reflexivity**. It does not compare the model's belief against "the correct answer" — because during inference there is no correct answer to compare against. It only compares the model's belief today against its belief yesterday. If the belief hasn't changed for several consecutive days — it is either frozen, or dead. And Theorem 6 proves: when contractivity holds, it must be the former.
+
+The choice of $\epsilon$ is a precision-efficiency tradeoff. $\epsilon$ too large — belief isn't frozen yet but you declare it frozen; reasoning terminates prematurely; the answer may be inaccurate. $\epsilon$ too small — belief has already frozen but you keep it walking; computation is wasted. Theorem 6's second clause gives you an error bound: if $\epsilon = 10^{-4}$ and $k = 0.7$, then the KL divergence from the freezing point to the true fixed point does not exceed $10^{-4} / 0.3 \approx 3.3 \times 10^{-4}$ — for the vast majority of applications, this precision already far exceeds the inter-annotator agreement level of human labelers.
+
+The deepest practical insight may lie in Theorem 6's converse: **when the KL freezing criterion is NOT satisfied, what is the model telling you?** If $\Delta_t$ still hasn't converged after dozens of steps — not slowly decreasing, but oscillating or flatlining — that means contractivity does not hold in that region. The reasoning operator $\Phi_\eta$ is not contractive near the current belief. This could be because: $p_t$ is stuck on the boundary between two attractors (near a saddle), or has entered a region where contractivity has been destroyed ($k \geq 1$). In either case, the simplest intervention strategy is: **inject temperature.** Let stochastic perturbation nudge the belief out of this "stagnation zone," and let it restart contraction descent elsewhere.
+
+Temperature is honesty. It admits your model may walk into the wrong basin. It provides a mechanism to walk out. Zero temperature is arrogance — it assumes your model will never step wrong.
+
+---
+
+:::info
+
+**Mr. Pallas's Cat: The Closing of Volume III**
+
+Volume III, from the first word of ch7, has been doing one thing: **dragging you from the water's surface down into the depths.**
+
+You first saw chain of thought — that string of text you thought was "reasoning." We said: that is the shadow. The real reasoning is beneath your feet — in the several-hundred-dimensional hidden state space, a continuous curve pushed along by an invisible vector field.
+
+Then you saw the field — the reasoning field $F_x$. It is a wilderness, with basins and traps. The correct answer has a broad basin in that wilderness — not because it is correct, but because the training data dug deep there. Wrong answers also have basins — far shallower, but deep enough to capture a belief that wanders in from the wrong direction. Verifiers fill in those traps. RLHF redistributes the energy. But you cannot create new basins — only reshape existing ones.
+
+Finally, you learned that the length of reasoning is not up to you — it is determined by the terrain. Theorem 1 tells you the minimum number of steps required. Theorem 3 tells you how training shortens that road. Theorem 4 tells you that larger models make the road flatter. Theorem 5 tells you that temperature is an escape tool. Theorem 6 tells you that when belief solidifies — you can stop.
+
+These three chapters together give a complete answer — not about "how models reason," but about "what the structure of reasoning is." Reasoning is not symbol manipulation. Reasoning is not logical deduction. Reasoning is not token generation.
+
+**Reasoning is the flow of belief along a vector field on an energy terrain, until it reaches a fixed point.**
+
+If you take away only one sentence, take this one. Not because it is precise — but because it draws you a map. The next time you see a model output a string of tokens, I hope you see not text. I hope you see the wilderness beneath its feet, the fixed points around it, the basin it is sliding toward — and all the ruggedness of that terrain.
+
+You have learned to dive. Now, when you lift your head and look at the surface, you will no longer mistake the ripples for the river.
+
+:::
+
+:::
+
 
 ## 9.6 Belief Fixed Points: The Geometric Stopping Criterion for Reasoning
 

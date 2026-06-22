@@ -58,6 +58,23 @@ Think about it. If chain of thought were truly just a sequence of words, then "t
 
 To understand that something, we first need to give it a name. "Implicit chain" is that name.
 
+
+:::info
+
+**Mr. Pallas's Cat: The Power of Naming**
+
+You might think "explicit chain" and "implicit chain" are just two new words — swapping "token sequence" and "hidden state sequence" for different labels, nothing essential changed.
+
+But if names were just labels, why did the metaphor of "loss terrain" reshape an entire field's understanding of optimization? Because naming is not sticking on labels — naming is **a scalpel that cuts through conceptual space.** Before you had the name "implicit chain," you looked at the hidden state sequence and saw a pile of vectors — alongside batch size, learning rate, and gradient clip, just another internal variable to monitor but not care about.
+
+With the name "implicit chain," you are forced to admit: **this string of vectors is not junk data — it is a trajectory.** And a trajectory has direction, velocity, curvature, and convergence. A trajectory obeys conservation dynamics. A trajectory can be analyzed, predicted, and intervened upon.
+
+On the day you called it a "hidden state sequence," you were an engineer monitoring an internal variable. On the day you call it an "implicit chain," you are a geometer studying a curve in belief space.
+
+Naming does not change reality. Naming changes the **focal length** through which you **see** reality.
+
+:::
+
 With these two definitions, a natural follow-up question emerges: **how does the implicit chain itself move?** What laws govern each of its steps—$h_t \to h_{t+1}$?
 
 ## 7.2 Dynamics of the Implicit Chain: Euler's Method in Hidden State Space
@@ -78,7 +95,19 @@ where $F_\theta$ is the composite vector field of self-attention and FFN inside 
 
 :::info
 
-**Pallas's Cat Professor: The Skier**
+This metaphor can be pushed further. Imagine a skier standing at the summit. Before them lie three forks: the left trail is wide and groomed but has ice patches, the middle trail winds through even-grade slopes, the right trail is a steep, narrow black diamond. The skier surveys the terrain and chooses the middle.
+
+They ski ten meters — and the terrain has changed. Because the middle trail forks again ahead. They choose again. Ski again. Choose again.
+
+The crucial thing is not the precision of their choices. The crucial thing is: **every choice they make irreversibly alters the space of subsequent options.** Choose left, and right vanishes forever — not because a gate closed, but because after skiing down the left fork, you are now standing on a different slope. The right trail, from where you now stand, is uphill. You cannot go back.
+
+This is why a wrong "first" is so lethal. The model utters a wrong "First, we transform the problem into..." — that "transform" is not empty words. It changes $h_t$, which changes $F_\theta(h_t, x_{t+1})$, which changes the distribution of all possible tokens in the next step. That wrong "first" rotated the entire mountain by a few degrees. Every subsequent "then" can only ski on this already-warped mountain.
+
+The most terrifying thing about a self-driven system is not that it makes mistakes — it is that every mistake it makes reshapes the terrain beneath its feet, making the same mistake more "reasonable" at the next step.
+
+
+
+:::info**Pallas's Cat Professor: The Skier**
 
 A ResNet's trajectory is like a marble rolling down a hill—its initial position and the terrain determine its entire fate. The marble has no choice. It simply obeys gravity.
 
@@ -90,7 +119,43 @@ This is the essence of a self-driven system: **the model chooses a token at each
 
 This explains why chain of thought sometimes goes off the rails. If the skier takes a wrong fork—turns left when they should have turned right—they may ski into a dead end. And they cannot turn back, because with every extra meter they ski, the way back becomes steeper. When the model utters a wrong "first," every subsequent "then" has to navigate a terrain that the "first" has already reshaped. The error is not added on top of the correct answer—the error changes the road to the answer.
 :::
+You can get a concrete feel for the power of this classification with a numerical experiment. Suppose a model is solving a math problem. Its hidden state trajectory $(h_0, h_1, \ldots, h_8)$ corresponds to these explicit tokens:
 
+> "First, let $x$ be the unknown. Then, according to the conditions, set up the equation $2x + 3 = 7$. Therefore, we can solve for $x = 2$. So the answer is 2."
+
+If you only look at these tokens — every step seems reasonable, the logic is coherent. But if you track the hidden state displacement $\|\Delta h_t\|$:
+
+| Step | Token | $\|\Delta h_t\|$ | $\cos\alpha_t$ | Classification |
+|------|-------|------------------|----------------|------|
+| 1 | "First" | 1.2 (baseline) | — | Structural |
+| 2 | "let $x$ be..." | 8.7 | 0.3 | **Substantive** |
+| 3 | "Then" | 1.1 | 0.95 | Structural |
+| 4 | "according to..." | 9.4 | 0.85 | **Substantive** |
+| 5 | "Therefore" | 1.3 | 0.92 | Structural |
+| 6 | "we can solve..." | 7.2 | 0.78 | **Substantive** |
+| 7 | "So" | 1.0 | 0.97 | Structural |
+| 8 | "the answer is 2" | 2.1 | 0.5 | Substantive (weak) |
+
+Structural tokens consistently have displacement magnitudes between 1.0–1.3 — they are practically "treading water." Substantive tokens have displacements between 7–10 — the genuine reasoning leaps happen at these steps. Notice step 8 ("the answer is 2") — though it is the answer, its displacement is only 2.1. Because by the time the model reaches this step, its internal belief has already nearly solidified — outputting the answer is merely projecting an already-arrived-at position onto text, not a new act of reasoning.
+
+This classification not only validates the intuition of "filler words vs. reasoning words" — it transforms that intuition into a numerical metric that can be computed without reading the text.
+
+:::info
+**Mr. Pallas's Cat: Silent Knowledge**
+
+There is an unsettling corollary here. If CoT training changes where the model goes "when silent" — then a model that has undergone CoT training, even if you forbid it from outputting any intermediate steps, already has an internal trajectory completely different from a model never trained with CoT.
+
+This means two things.
+
+First, **you cannot obtain a "CoT-free model" by "forbidding the model from outputting CoT."** The terrain reshaping of CoT training is permanent — it is etched into parameter space. Forbidding token output merely hides the ripples on the water's surface. The currents beneath have already been rerouted.
+
+Second, this suggests a form of reasoning we may never be able to intuitively perceive. Imagine a model silently walking through a series of concept anchors in hidden state space — $c_1 \to c_2 \to \cdots \to c_k \to p^*$ — outputting not a single token along the way, spitting out the answer only at the end. To a human observer, this model "directly gave the answer." But to the model, it walked a complete reasoning chain — it simply was not projected onto text.
+
+Every existing method we have for evaluating reasoning — inspecting CoT quality, checking intermediate steps, verifying logical chains — is utterly powerless before this "silent reasoning." Because you are not evaluating reasoning — you are evaluating reasoning's projection onto the water's surface. And projection can be omitted.
+
+Theorem 1 tells us: the effectiveness of CoT training does not depend on the explicit output of CoT. This means — in the limit — **the best reasoning may require no language at all.** Language is only what we humans need. The model does not need it.
+
+:::
 This dynamical description explains the geometric difference between "coherent reasoning" and "derailed reasoning"—but a more vexing question still hangs in the air. The opening of ch7 raised this: **after CoT training, even without outputting a chain of thought, the accuracy of direct answers improves**. Why?
 
 ## 7.3 Implicit Reasoning: Trajectory Movement Without Tokens
@@ -120,6 +185,26 @@ CoT training does something exactly parallel. During training, the model is forc
 **You don't need the model to say "let's think step by step"—you have already made its internal gradients say it.**
 
 With this explanation in hand, the next question emerges naturally: not every step in a chain of thought is equally important. Some steps are critical reasoning leaps, others are merely filler rhetoric. Can we distinguish them—without reading the text—solely through the geometric features of the hidden states?
+
+
+:::info
+
+**Mr. Pallas's Cat: Two Faces of Convergence**
+
+This theorem has a subtle detail that is easy to overlook. $D_0 = D_{\mathrm{KL}}(p^*\|p_0)$ — the KL divergence from the initial belief to the correct answer — is beyond your control. It is determined by the problem itself. But $k = 1 - \eta(2\mu - \eta L^2)/C$ — the contraction factor — is something you can reshape through training.
+
+This means two entirely different things.
+
+For a model not trained with CoT, facing a complex reasoning problem: $D_0$ may be large (the model's initial belief is chaotic), and $k$ may be close to 1 (the terrain is rugged, compression is slow). Both factors compound — reasoning requires many steps. If $k$ approaches or even equals 1 in certain regions (compression vanishes), the model may never converge — reasoning fails.
+
+For the same model, after CoT training: $D_0$ is unchanged — the problem is still the same problem. But $k$ has been pushed lower — because CoT training has reshaped the reasoning field $F_x$, increasing $\mu$ along the correct path (the terrain is more convex) and decreasing $L$ (the terrain is smoother). $k$ drops from 0.98 to 0.85, and the required number of steps falls to one-third of the original.
+
+This is the geometric essence of CoT training: **it does not change how hard the problem is — it changes the terrain so that an equally hard problem becomes easier to traverse.** The contraction factor $k$ is the geometric measure of "how good the model is at this problem." The closer $k$ is to 0, the more "skilled" the model; the closer $k$ is to 1, the more the model "struggles."
+
+And you don't even need to wait for the model to finish walking to know what $k$ is. You only need to measure the KL decay rate over the first few steps. After three steps, you can predict how many steps the entire chain will need to converge.
+
+:::
+
 
 ## 7.4 Geometric Classification of Reasoning Steps
 
