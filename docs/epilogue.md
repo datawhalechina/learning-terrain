@@ -88,8 +88,8 @@ $$h^* = f_\theta(h^*, x)$$
 **Bregman 散度（KL 的母公式）：**
 $$D_F(p \| q) = F(p) - F(q) - \langle \nabla F(q), p - q \rangle$$
 
-**永霖极限（推理收敛判据）：**
-$$D_{\mathrm{KL}}(p_{t+1}(y|x) \| p_t(y|x)) < \epsilon$$
+**永霖极限：**
+$$\eta < \frac{2\mu}{L^2} \;\Rightarrow\; \rho = \sqrt{1-2\eta\mu+\eta^2L^2} < 1, \quad p_t \to p^*, \quad D_{\mathrm{KL}}(p^*\|p_t) \le \kappa\rho^{2t}D_{\mathrm{KL}}(p^*\|p_0)$$
 
 **得分函数（扩散的向量场）：**
 $$dx = \left[-\frac{1}{2}\beta(t)\,x - \beta(t)\,\nabla_x \log p_t(x)\right] dt + \sqrt{\beta(t)}\,d\bar{w}$$
