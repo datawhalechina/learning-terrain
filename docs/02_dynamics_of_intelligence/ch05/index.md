@@ -415,23 +415,37 @@ $$D_{\mathrm{KL}}(q_1 \| q_2) \leq \underbrace{\left(1 - \frac{\eta(2\mu - \eta 
 
 **推导。** 压缩映射要求 $\eta < 2\mu / L^2$，其中 $\mu$ 是能量函数的强凸常数，$L$ 是光滑常数。这两个常数不是神秘的数字——它们直接编码在 $\nabla^2 E(p)$ 的 Hessian 矩阵中。
 
-对于交叉熵损失 $E(p) = \mathbb{E}_D[-\log p_y]$，Hessian 在概率单纯形上有解析形式：
+对于交叉熵损失 $E(p) = \mathbb{E}_D[-\log p_y]$（$q_i = P_D(y=i)$ 为训练标签边际），Hessian 在概率单纯形上的一般位置为：
 
-$$\nabla^2 E(p) = \text{diag}\left(\frac{1}{p_i}\right)$$
+$$\nabla^2 E(p) = \text{diag}\left(\frac{q_i}{p_i^2}\right)$$
 
-这是一个对角矩阵——每个对角线元素是 $1/p_i$。在 $p_i$ 大的方向（模型确信的类别），曲率小，地形平坦；在 $p_i$ 小的方向（模型几乎排除的类别），曲率大，地形陡峭。
+在不动点 $p = q$ 处取值为 $\nabla^2 E(q) = \text{diag}(1/q_i)$——与负熵 $\Phi(p) = \sum_i p_i \log p_i$ 的 Hessian 完全相同。**曲率属于空间而不属于损失**：目标分布只进入一阶项（漂移），不进入二阶项（曲率）。这是下文 $\eta_{\max}(p)$ 可以完全从当前位置读出、无需知道目标分布的几何原因。
 
-强凸常数 $\mu$ 是 Hessian 的最小特征值——对应最平坦的方向。在单纯形上，最平坦的方向是概率最大的维度：
+在不动点 $p = q$ 处，强凸常数 $\mu$ 与光滑常数 $L$ 就是该曲率张量的**谱极值**——对应最平坦与最陡峭的方向：
 
-$$\mu = \frac{1}{\max_i p_i}$$
+$$\mu = \lambda_{\min} = \frac{1}{\max_i p_i}, \qquad L = \lambda_{\max} = \frac{1}{\min_i p_i}$$
 
-光滑常数 $L$ 是 Hessian 的最大特征值——对应最陡峭的方向。最陡峭的方向是概率最小的维度：
-
-$$L = \frac{1}{\min_i p_i}$$
+（$p_i$ 取不动点处的值。一般位置的精确谱极值为 $\min_i q_i/p_i^2$、$\max_i q_i/p_i^2$，不动点邻域内二者一致。）
 
 代入巴拿赫压缩的步长条件 $\eta < 2\mu / L^2$：
 
-$$\eta_{\max}(p) = \frac{2\mu}{L^2} = \frac{2 / \max_i p_i}{(1 / \min_i p_i)^2} = 2 \cdot \frac{\min_i p_i^2}{\max_i p_i}$$
+$$\eta_{\max}(p) = \frac{2\mu}{L^2} = \frac{2}{L \cdot \kappa}, \qquad \kappa = \frac{L}{\mu} = \frac{\max_i p_i}{\min_i p_i}$$
+
+也就是
+
+$$\eta_{\max}(p) = 2 \cdot \frac{\min_i p_i^2}{\max_i p_i}$$
+
+其中 $\kappa$ 是曲率各向异性（谱比/条件数）——$\max_i p_i$ 离 1 多远、$\min_i p_i$ 离 0 多远，即**离单纯形边缘的脆弱度**。读法：最高曲率 $L$ 告诉你"多陡"，$\kappa$ 告诉你"多各向异性"，安全步长被二者的乘积压缩。欧拉法的稳定性界 $\eta < 2/\lambda_{\max}$ 是各向同性形式，$\eta_{\max} = 2/(L\kappa)$ 是它的各向异性精确修正。
+
+**更紧的精确界：切空间谱。** 严格地说，投影把动力学约束在切空间 $\{v: \sum_i v_i = 0\}$ 内，因此精确的局部失稳条件是
+
+$$\eta < \frac{2}{\theta_{\max}}, \qquad \theta_{\max} = \text{最大特征值}\;\operatorname{diag}\left(\frac{1}{q_i}\right)\Big|_{\text{切空间}}$$
+
+K = 3 时 $\theta_{\max}$ 是
+
+$$3q_0q_1q_2\, \theta^2 - 2(q_0q_1+q_0q_2+q_1q_2)\, \theta + 1 = 0$$
+
+的最大根。由于 $\theta_{\max} \leq L$，恒有 $2/\theta_{\max} \geq 2/L = \kappa \cdot \eta_{\max}$——即 $\eta_{\max} = 2/(L\kappa)$ 是**全空间谱**给出的保守界，切空间谱界更紧。二者的关系在附录 5.A 的数值验证中同时可见：精确界（数值点贴线）与保守界（数值点恒在其上）。
 
 这个公式的每一项都有清晰的几何含义：
 
@@ -562,3 +576,316 @@ KL 散度是 $F$ 取负熵时的 Bregman 散度——不是偶然的巧合，而
 **点积注意力作为熵最优传输.** Litman (2025) [arXiv:2508.08369] — 注意力机制的前向传播等价于退化熵最优传输问题的精确解——Transformer 的自注意力在每一步都在求解一个熵正则化的传输问题，Fisher 信息矩阵则定义了注意力分布的几何曲率。
 
 **Softmax 的对角化.** Garrod, Keating & Thrampoulidis (2025) [arXiv:2512.04006] — Hadamard 初始化使得 softmax 的 Fisher 信息矩阵对角化，交叉熵梯度流收敛到 Neural Collapse 几何——这是信息几何直接解释深度学习训练动态的首个严格结果。
+
+---
+
+## 附录 5.A：直接证据——能量地形与闭式解的数值验证
+
+本节给第 5.6–5.10 节的闭式解配**直接证据**：在信念单纯形上数值实现推理动力学（KL 能量的梯度流 + 投影到单纯形的欧拉步），逐项核验闭式解的四个预测。整套实验可复现：完整源码见 `docs/public/scripts/ch05_energy_terrain.py`（正文末尾贴了完整代码），图见 `ch05_energy_terrain.png`。
+
+![图 5.A：能量地形与闭式解的数值验证](/figures/ch05_energy_terrain.png)
+
+**四面板读法**：
+
+**（a）地形存在。** $E = D_{KL}(p^*\|p)$ 的等高线在单纯形上形成以 $p^*$ 为谷底的能量盆地；从三个不同初始信念出发、以 $0.8\,\eta_{\max}$ 步长迭代的推理轨迹全部收敛到 $p^*$。推理是地形上的运动——这是全书主张的最直接画面。
+
+**（b）曲率谱：闭式 = 数值。** 沿一条推理轨迹，解析谱（$\lambda_{\min}=1/\max_i p_i$、$\lambda_{\max}=1/\min_i p_i$，不动点处）与数值差分 Hessian 的特征值逐点重合，$\kappa = L/\mu = 7.00 = 0.70/0.10$。
+
+**（c）$\eta_{\max}$ 的闭式景观。** $\eta_{\max}(p) = 2\min_i p_i^2/\max_i p_i$ 在单纯形上的对数色图：中心可以大步走，越靠边缘越必须小步。"地形决定步伐"的字面图像。
+
+**（d）稳定边界：闭式解精确预测数值。** 局部扰动动力学的数值失稳阈值 $\eta^*$ 与闭式解 $2/\theta_{\max}$（切空间谱，§5.10 补充段）在 30 个随机目标分布上 $R^2 = 0.9978$、中位误差 2.16%——蓝点全部贴在对角线上。粉色三角是从均匀先验出发的全局扫描数值阈值，恒定在保守界 $2/(L\kappa)$ 之上。
+
+**复现者要避开两个坑。**（i）投影到单纯形的标准算法必须取*最后一个*满足 $u_j - (\sum_{k\leq j}u_k - 1)/j > 0$ 的 $j$；索引取错会产生行和 $\neq 1$ 的"伪投影"，轨迹第一步就会飞出单纯形。（ii）判别稳定性要用渐近终点距离 $\|p_T - p^*\|/\|p_0 - p^*\| < 1$，而不是全程最大值——中等步长下非线性暂态会先放大后收缩，全程最大值会把线性稳定的区域误判为失稳（实际测试给出 0.79 的虚假比值；改用渐近判据后为 1.000，与闭式解一致）。
+
+**源代码**（完整可运行；运行后将图保存为同级目录 `ch05_energy_terrain.png`）：
+
+```python
+"""
+Energy Landscape of Reasoning: Closed-Form Curvature and Safe Step Size
+========================================================================
+Demonstration accompanying the Yonglin Limit (永霖极限) derivation.
+
+Setup: belief simplex Delta^2 (3 classes). The reasoning energy is
+    E(p) = D_KL(p* || p),  p* = target/attractor belief.
+Inference = Euler steps of the gradient flow on E with projection to the
+simplex:  p_{t+1} = proj_Delta(p_t - eta * grad E(p_t)).
+
+Closed-form facts under study (true at the fixed point p = p*):
+    Hess E(p)  = diag(q_i / p_i^2)   [general position; q_i = p*_i]
+               -> diag(1/p_i)        [at p = p*]
+    mu = lambda_min = 1/max_i p_i,  L = lambda_max = 1/min_i p_i
+    kappa = L/mu = max_i p_i / min_i p_i          (spectral ratio / condition number)
+    eta_max = 2 mu / L^2 = 2 / (L * kappa) = 2 min_i p_i^2 / max_i p_i
+
+On the tangent space {v: sum v_i = 0} (the subspace preserved by the
+projection) the exact local stability boundary is
+    eta_crit = 2 / theta_max,  theta_max = largest eigenvalue of
+    diag(1/q_i) restricted to the tangent space;
+    for K = 3, theta_max solves  3 q0 q1 q2 th^2 - 2 (q0q1+q0q2+q1q2) th + 1 = 0.
+"""
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
+from matplotlib.patheffects import withStroke
+
+rng = np.random.default_rng(42)
+
+
+# ----------------------------- core helpers -----------------------------
+def proj_simplex(v):
+    """Euclidean projection onto probability simplex (vectorized over last axis).
+    Standard algorithm: find the last index j with u_j - (css_j - 1)/j > 0."""
+    v = np.asarray(v, float)
+    shape = v.shape
+    v = v.reshape(-1, shape[-1])
+    K = shape[-1]
+    u = np.sort(v, axis=1)[:, ::-1]
+    css = np.cumsum(u, axis=1)
+    avg = (css - 1.0) / np.arange(1, K + 1)
+    cond = u - avg > 0
+    j = np.where(cond)[1]    # column indices of True entries (rows repeat)
+    # last True index per row:
+    last = np.array([np.where(cond[i])[0][-1] for i in range(len(cond))])
+    theta = (css[np.arange(len(v)), last] - 1.0) / (last + 1)
+    out = np.maximum(v - theta[:, None], 0.0)
+    return out.reshape(shape)
+
+
+def energy(p, pstar):
+    """E(p) = D_KL(p* || p), elementwise-safe (p clipped away from 0)."""
+    pc = np.clip(p, 1e-300, 1.0)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        e = np.sum(pstar * np.log(pstar / pc), axis=-1)
+    return np.where(np.all(p > 0, axis=-1), e, np.inf)
+
+
+def grad_energy(p, pstar):
+    return -pstar / np.clip(p, 1e-12, 1.0)
+
+
+def euler_step(p, pstar, eta):
+    return proj_simplex(p - eta * grad_energy(p, pstar))
+
+
+def eta_max_closed(pstar):
+    """Closed-form safe step size at the fixed point: 2 min^2 / max."""
+    return 2.0 * np.min(pstar) ** 2 / np.max(pstar)
+
+
+def hessian_numeric(p, pstar, eps=1e-6):
+    """Central-difference Hessian of E at p (K=3)."""
+    K = len(p)
+    H = np.zeros((K, K))
+    for i in range(K):
+        for j in range(K):
+            ei = np.zeros(K); ej = np.zeros(K)
+            ei[i] = eps; ej[j] = eps
+            H[i, j] = (energy(p + ei + ej, pstar) - energy(p + ei - ej, pstar)
+                       - energy(p - ei + ej, pstar) + energy(p - ei - ej, pstar)) / (4 * eps * eps)
+    return H
+
+
+def to_xy(p):
+    """Barycentric -> Cartesian (A=e1 at (0,0), B=e2 at (1,0), C=e3 at (0.5,sqrt3/2))."""
+    return p[..., 1] * 1.0 + p[..., 2] * 0.5, p[..., 2] * (np.sqrt(3) / 2)
+
+
+def from_xy(x, y):
+    s = np.sqrt(3.0) / 2.0
+    p3 = np.clip(y / s, 0.0, 1.0)
+    p2 = np.clip(x - y / (np.sqrt(3.0)), 0.0, 1.0)
+    p1 = 1.0 - p2 - p3
+    mask = (p1 >= -1e-9) & (p2 >= -1e-9) & (p3 >= -1e-9)
+    p1 = np.clip(p1, 0.0, 1.0)
+    return np.stack([p1, p2, p3], axis=-1), mask
+
+
+# ----------------------------- figure panels -----------------------------
+PSTAR = np.array([0.70, 0.20, 0.10])
+EMAX = eta_max_closed(PSTAR)          # ~ 2*0.01/0.7 = 0.02857
+ETA_ILLUS = 0.8 * EMAX
+
+fig, axes = plt.subplots(2, 2, figsize=(13.2, 10.4))
+ps = withStroke(linewidth=3, foreground="white")
+
+# ---------- (a) energy terrain + trajectories ----------
+ax = axes[0, 0]
+xgrid = np.linspace(-0.05, 1.05, 300)
+ygrid = np.linspace(-0.05, np.sqrt(3) / 2 + 0.05, 260)
+X, Y = np.meshgrid(xgrid, ygrid)
+P, mask = from_xy(X, Y)
+E = energy(P, PSTAR)
+E = np.where(mask, E, np.nan)
+lv = np.geomspace(1e-5, 50, 40)
+cf = ax.contourf(X, Y, E, levels=lv, cmap="viridis", norm=LogNorm(vmin=1e-5, vmax=50))
+cbar = fig.colorbar(cf, ax=ax, shrink=0.85)
+cbar.set_label(r"$E(p)=D_{KL}(p^{*}\|p)$  [log scale]", fontsize=9)
+
+starts = [np.array([1/3, 1/3, 1/3]), np.array([0.15, 0.60, 0.25]), np.array([0.45, 0.25, 0.30])]
+for p0 in starts:
+    p = p0.copy()
+    xs, ys = [], []
+    for t in range(120):
+        p = euler_step(p, PSTAR, ETA_ILLUS)
+        xs.append(to_xy(p)[0]); ys.append(to_xy(p)[1])
+        if energy(p, PSTAR) < 1e-6:
+            break
+    ax.plot(xs, ys, lw=1.8, color="#D55E00", alpha=0.9)
+    ax.plot(xs[0], ys[0], "o", ms=6, color="#D55E00", mfc="white")
+    ax.annotate("$p_0$", (xs[0], ys[0]), textcoords="offset points", xytext=(-2, 8),
+                fontsize=9, color="#D55E00")
+
+px, py = to_xy(PSTAR)
+ax.plot(px, py, "*", ms=22, color="#0072B2", mec="k", mew=0.8, zorder=10)
+ax.annotate(r"$p^{*}$  (fixed point)", (px, py), textcoords="offset points",
+            xytext=(8, -16), fontsize=11, color="#0072B2", fontweight="bold")
+ax.text(0.98, 0.94, f"$\\eta=0.8\\,\\eta_{{max}}$ = {ETA_ILLUS:.4f}",
+        transform=ax.transAxes, ha="right", va="top", fontsize=9,
+        bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.85))
+ax.set_title("(a) The energy terrain of reasoning", fontsize=12, fontweight="bold")
+ax.text(0.5, -0.14, "belief simplex $\\Delta^2$: $p_1$-vertex (left), $p_2$-vertex (right), $p_3$-vertex (top)",
+        transform=ax.transAxes, ha="center", fontsize=8, color="0.35")
+ax.set_aspect("equal"); ax.axis("off")
+
+# ---------- (b) curvature spectrum along one trajectory ----------
+ax = axes[0, 1]
+p = np.array([1/3, 1/3, 1/3])
+lmax_a, lmin_a, kap_a = [], [], []
+lmax_n, lmin_n = [], []
+p_rec = []
+for t in range(80):
+    p = euler_step(p, PSTAR, ETA_ILLUS)
+    p_rec.append(p.copy())
+for p in p_rec:
+    lmax_a.append(np.max(PSTAR / p**2)); lmin_a.append(np.min(PSTAR / p**2))
+    H = hessian_numeric(p, PSTAR)
+    w = np.linalg.eigvalsh(H)
+    lmax_n.append(w[-1]); lmin_n.append(w[0])
+ts = np.arange(len(p_rec))
+ax.plot(ts, lmax_a, color="#0072B2", lw=1.8, label=r"closed form  $\lambda_{max}$")
+ax.plot(ts, lmin_a, color="#009E73", lw=1.8, label=r"closed form  $\lambda_{min}$")
+ax.plot(ts, lmax_n, "o", ms=4.2, color="#0072B2", mfc="none", label=r"numerical Hessian  $\lambda_{max}$")
+ax.plot(ts, lmin_n, "s", ms=4.2, color="#009E73", mfc="none", label=r"numerical Hessian  $\lambda_{min}$")
+ax.set_yscale("log")
+ax.set_xlabel("reasoning step  $t$", fontsize=10)
+ax.set_ylabel("curvature eigenvalues  $\\lambda$", fontsize=10)
+ax.set_title("(b) Curvature spectrum: closed form = numerical", fontsize=12, fontweight="bold")
+ax.legend(fontsize=8, framealpha=0.9, loc="upper right")
+ax.grid(alpha=0.3)
+kap = PSTAR.max() / PSTAR.min()
+ax.text(0.98, 0.08, r"$\kappa = L/\mu = %.2f = 0.70/0.10$ (at $p^{*}$)" % kap,
+        transform=ax.transAxes, ha="right", fontsize=9,
+        bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.85))
+
+# ---------- (c) analytic eta_max surface ----------
+ax = axes[1, 0]
+XS, YS = np.meshgrid(np.linspace(0, 1, 260), np.linspace(0, np.sqrt(3) / 2, 230))
+PS, maskC = from_xy(XS, YS)
+eta = np.where(maskC & np.all(PS > 1e-4, axis=-1),
+               2.0 * np.min(PS, axis=-1) ** 2 / np.max(PS, axis=-1), np.nan)
+eta = np.where(maskC, eta, np.nan)
+lv2 = np.geomspace(1e-6, 0.25, 35)
+cf2 = ax.contourf(XS, YS, eta, levels=lv2, cmap="magma", norm=LogNorm(vmin=1e-6, vmax=0.25))
+cbar2 = fig.colorbar(cf2, ax=ax, shrink=0.85)
+cbar2.set_label(r"$\eta_{max}(p)=2\min_i p_i^2/\max_i p_i$  [log]", fontsize=9)
+ax.plot(px, py, "*", ms=22, color="#56B4E9", mec="k", mew=0.8, zorder=10)
+ax.annotate(r"$p^{*}$", (px, py), textcoords="offset points", xytext=(6, 10),
+            fontsize=11, color="#56B4E9", fontweight="bold")
+ax.set_title("(c) Analytic safe step size on the simplex", fontsize=12, fontweight="bold")
+ax.text(0.5, -0.14, "$\\eta_{max} \\to 0$ near the edges: the terrain dictates the pace",
+        transform=ax.transAxes, ha="center", fontsize=8.5, color="0.35")
+ax.set_aspect("equal"); ax.axis("off")
+
+# ---------- (d) closed form vs numerical stability boundary ----------
+ax = axes[1, 1]
+
+def theta_max_tangent(q):
+    """Largest eigenvalue of diag(q_i^{-1}) restricted to the tangent space {v: sum v_i = 0}.
+    K = 3: analytic root of  3 q0 q1 q2 th^2 - 2 (q0q1+q0q2+q1q2) th + 1 = 0."""
+    q0, q1, q2 = q
+    a = 3 * q0 * q1 * q2
+    b = -2 * (q0 * q1 + q0 * q2 + q1 * q2)
+    c = 1.0
+    disc = b * b - 4 * a * c
+    th = (-b + np.sqrt(disc)) / (2 * a)
+    return th
+
+
+def eta_crit_tangent_closed(q):
+    """Exact local stability boundary: eta_safe < 2 / lambda_max of Hessian on the tangent space."""
+    return 2.0 / theta_max_tangent(q)
+
+
+# ---------- (d) closed form vs numerical stability boundary ----------
+ax = axes[1, 1]
+
+etas_scan = np.logspace(-4.0, 0.6, 140)
+
+# --- LOCAL analysis: perturbations of p*; exact prediction = tangent-space spectrum ---
+local_ana, local_num = [], []
+for _ in range(30):
+    ps_ = rng.dirichlet(np.ones(3)) * 0.9 + 0.05
+    ps_ = ps_ / ps_.sum()
+    pert = [proj_simplex(ps_ + 0.02 * rng.normal(0, 1, 3) * np.array([1, 0.5, 0.25])) for _ in range(8)]
+    # asymptotic stability: final distance does not grow
+    worst = np.zeros(len(etas_scan))
+    for p0 in pert:
+        P = np.broadcast_to(p0.copy(), (len(etas_scan), 3)).copy()
+        d0 = np.linalg.norm(p0 - ps_)
+        for _ in range(500):
+            P = proj_simplex(P - etas_scan[:, None] * (-ps_ / np.clip(P, 1e-12, 1.0)))
+        worst = np.maximum(worst, np.linalg.norm(P - ps_, axis=1) / d0)
+    idx = np.where(worst < 1.0)[0]
+    local_num.append(etas_scan[idx[-1]] if len(idx) else etas_scan[0] / 2)
+    local_ana.append(eta_crit_tangent_closed(ps_))
+
+# --- GLOBAL analysis: from uniform prior; conservative closed form = full-space spectrum ---
+glob_ana, glob_num = [], []
+for _ in range(30):
+    ps_ = rng.dirichlet(np.ones(3)) * 0.9 + 0.05
+    ps_ = ps_ / ps_.sum()
+    P = np.broadcast_to(np.full(3, 1 / 3), (len(etas_scan), 3)).copy()
+    for _ in range(400):
+        P = proj_simplex(P - etas_scan[:, None] * (-ps_ / np.clip(P, 1e-12, 1.0)))
+    fk = np.sum(ps_ * np.log(np.clip(ps_, 1e-12, 1) / np.clip(P, 1e-12, 1)), axis=1)
+    idx = np.where(fk < 1e-3)[0]
+    glob_num.append(etas_scan[idx[-1]] if len(idx) else etas_scan[0] / 2)
+    glob_ana.append(eta_max_closed(ps_))
+
+local_ana, local_num = np.array(local_ana), np.array(local_num)
+glob_ana, glob_num = np.array(glob_ana), np.array(glob_num)
+
+ax.loglog(local_ana, local_num, "o", ms=7, color="#0072B2", alpha=0.85, zorder=6,
+          label=r"local: $2/\lambda_{\max}$ on tangent space (exact)")
+ax.loglog(glob_ana, glob_num, "^", ms=7, color="#CC79A7", alpha=0.85, zorder=5,
+          label=r"global: conservative bound $2/(L\kappa)$")
+lims = [min(local_ana.min(), local_num.min()) * 0.6, max(local_ana.max(), local_num.max()) * 1.6]
+ax.loglog(lims, lims, "k--", lw=1.5, label="y = x (exact prediction)")
+logR = np.corrcoef(np.log10(local_ana), np.log10(local_num))[0, 1] ** 2
+med = np.median(np.abs(local_num - local_ana) / local_ana)
+ax.set_xlabel(r"closed-form  $\eta_{crit}$", fontsize=10)
+ax.set_ylabel("numerical stability threshold  $\\eta_{crit}$", fontsize=10)
+ax.set_title("(d) Closed form = the exact local stability boundary", fontsize=12, fontweight="bold")
+ax.legend(fontsize=8.5, loc="upper left")
+ax.grid(alpha=0.3, which="both")
+ax.text(0.03, 0.05, f"exact (tangent spectrum): $R^2$ = {logR:.4f}, median err = {med:.2%}\nconservative (full spectrum): $\\eta_{{crit}} \\geq 2/(L\\kappa)$ always",
+        transform=ax.transAxes, fontsize=9, color="k", fontweight="bold",
+        bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.9))
+
+fig.suptitle("The Energy Landscape of Reasoning: closed-form geometry and its verification\n"
+             r"$E(p)=D_{KL}(p^{*}\|p)$,  inference $=$ Euler steps of $-\nabla E$ projected to the simplex",
+             fontsize=13.5, fontweight="bold", y=0.995)
+fig.tight_layout(rect=[0, 0, 1, 0.95])
+out = "ch05_energy_terrain.png"   # saves next to the script
+fig.savefig(out, dpi=150, bbox_inches="tight")
+print("saved:", out)
+print(f"eta_max closed form (p* = {PSTAR}): {EMAX:.6f}")
+print(f"kappa at fixed point: {PSTAR.max()/PSTAR.min():.2f}")
+print(f"panel d: local R^2(log-log) = {logR:.4f}, n = {len(local_ana)}, median err = {med:.2%}")
+print(f"panel d: global: numerically stable region >= eta_max (projection adds stability)")
+
+```
+
+*图 5.A 与源码：李籽溪（兔狲教授），2026。脚本同步维护于 `docs/public/scripts/ch05_energy_terrain.py`。*

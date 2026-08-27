@@ -29,6 +29,8 @@ Thumbs.db
 
 # Temporary / backup
 scripts/
+!docs/public/scripts/
+!docs/public/scripts/*
 backup/
 .claude/
 *.log
